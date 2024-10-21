@@ -1,9 +1,14 @@
+<<<<<<< HEAD:patches/monero/0006-add-dummy-device-for-ledger.patch
 From 904fe95204ba02d1a8c81fc46c1423ba1685c94f Mon Sep 17 00:00:00 2001
+=======
+From 77f328ba6befb9b964f764a27f8a03b71bf9095d Mon Sep 17 00:00:00 2001
+>>>>>>> 1d8e0fb (ledger changes (#41)):patches/monero/0016-add-dummy-device-for-ledger.patch
 From: Czarek Nakamoto <cyjan@mrcyjanek.net>
 Date: Wed, 26 Jun 2024 15:04:38 +0200
 Subject: [PATCH 06/14] add dummy device for ledger
 
 ---
+<<<<<<< HEAD:patches/monero/0006-add-dummy-device-for-ledger.patch
  CMakeLists.txt                    |   6 +-
  src/device/CMakeLists.txt         |   6 +-
  src/device/device.cpp             |  10 ++-
@@ -17,6 +22,20 @@ Subject: [PATCH 06/14] add dummy device for ledger
  src/wallet/api/wallet2_api.h      |  12 +++
  src/wallet/api/wallet_manager.cpp |  12 ++-
  12 files changed, 365 insertions(+), 25 deletions(-)
+=======
+ CMakeLists.txt                 |   6 +-
+ src/device/CMakeLists.txt      |   6 +-
+ src/device/device.cpp          |  10 ++-
+ src/device/device.hpp          |  12 +--
+ src/device/device_io_dummy.cpp | 133 +++++++++++++++++++++++++++++++++
+ src/device/device_io_dummy.hpp |  74 ++++++++++++++++++
+ src/device/device_ledger.cpp   |   6 +-
+ src/device/device_ledger.hpp   |   7 +-
+ src/wallet/api/wallet.cpp      |  94 +++++++++++++++++++++++
+ src/wallet/api/wallet.h        |  18 +++++
+ src/wallet/api/wallet2_api.h   |  12 +++
+ 11 files changed, 357 insertions(+), 21 deletions(-)
+>>>>>>> 1d8e0fb (ledger changes (#41)):patches/monero/0016-add-dummy-device-for-ledger.patch
  create mode 100644 src/device/device_io_dummy.cpp
  create mode 100644 src/device/device_io_dummy.hpp
 
@@ -415,7 +434,11 @@ index 03058c4f1..39454ca6d 100644
          unsigned char buffer_send[BUFFER_SEND_SIZE];
          unsigned int  length_recv;
 diff --git a/src/wallet/api/wallet.cpp b/src/wallet/api/wallet.cpp
+<<<<<<< HEAD:patches/monero/0006-add-dummy-device-for-ledger.patch
 index 3fcd6f332..25ade04a7 100644
+=======
+index 8bdd75a5a..09f91c5e2 100644
+>>>>>>> 1d8e0fb (ledger changes (#41)):patches/monero/0016-add-dummy-device-for-ledger.patch
 --- a/src/wallet/api/wallet.cpp
 +++ b/src/wallet/api/wallet.cpp
 @@ -48,6 +48,9 @@
@@ -428,7 +451,11 @@ index 3fcd6f332..25ade04a7 100644
  
  using namespace std;
  using namespace cryptonote;
+<<<<<<< HEAD:patches/monero/0006-add-dummy-device-for-ledger.patch
 @@ -3178,4 +3181,95 @@ uint64_t WalletImpl::getBytesSent()
+=======
+@@ -3299,4 +3302,95 @@ uint64_t WalletImpl::getBytesSent()
+>>>>>>> 1d8e0fb (ledger changes (#41)):patches/monero/0016-add-dummy-device-for-ledger.patch
      return m_wallet->get_bytes_sent();
  }
  
@@ -600,5 +627,9 @@ index e81b8f83a..277be6ac9 100644
  
  std::vector<std::string> WalletManagerImpl::findWallets(const std::string &path)
 -- 
+<<<<<<< HEAD:patches/monero/0006-add-dummy-device-for-ledger.patch
 2.48.1
+=======
+2.45.1.windows.1
+>>>>>>> 1d8e0fb (ledger changes (#41)):patches/monero/0016-add-dummy-device-for-ledger.patch
 

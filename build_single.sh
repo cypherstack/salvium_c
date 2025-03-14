@@ -20,13 +20,13 @@ set -e
 repo=$1
 if [[ "x$repo" == "x" ]];
 then
-    echo "Usage: $0 monero/wownero/zano $(gcc -dumpmachine) -j$proccount"
+    echo "Usage: $0 monero/wownero/zano/salvium $(gcc -dumpmachine) -j$proccount"
     exit 1
 fi
 
-if [[ "x$repo" != "xwownero" && "x$repo" != "xmonero" && "x$repo" != "xzano" ]];
+if [[ "x$repo" != "xwownero" && "x$repo" != "xmonero" && "x$repo" != "xzano" && "x$repo" != "xsalvium" ]];
 then
-    echo "Usage: $0 monero/wownero/zano $(gcc -dumpmachine) -j$proccount"
+    echo "Usage: $0 monero/wownero/zano/salvium $(gcc -dumpmachine) -j$proccount"
     echo "Invalid target given"
     exit 1
 fi
@@ -41,7 +41,7 @@ fi
 HOST_ABI="$2"
 if [[ "x$HOST_ABI" == "x" ]];
 then
-    echo "Usage: $0 monero/wownero $(gcc -dumpmachine) -j$proccount"
+    echo "Usage: $0 monero/wownero/zano/salvium $(gcc -dumpmachine) -j$proccount"
     exit 1
 fi
 
@@ -49,7 +49,7 @@ NPROC="$3"
 
 if [[ "x$NPROC" == "x" ]];
 then
-    echo "Usage: $0 monero/wownero $(gcc -dumpmachine) -j$proccount"
+    echo "Usage: $0 monero/wownero/zano/salvium $(gcc -dumpmachine) -j$proccount"
     exit 1
 fi
 cd $(dirname $0)

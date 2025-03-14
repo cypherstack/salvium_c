@@ -16,3 +16,7 @@
 	url = https://github.com/MrCyjaneK/wownero-seed
 	branch = cyjan-namespace2
 	shallow = true
+[submodule "salvium"]
+	path = salvium
+	url = https://github.com/salvium/salvium
+	branch = rebase-v0.18

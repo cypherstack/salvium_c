@@ -12,7 +12,7 @@ diff --git a/src/wallet/api/wallet.cpp b/src/wallet/api/wallet.cpp
 index 67b170e3d..89df5c517 100644
 --- a/src/wallet/api/wallet.cpp
 +++ b/src/wallet/api/wallet.cpp
-@@ -826,12 +826,19 @@ bool WalletImpl::close(bool store)
+@@ -763,12 +763,19 @@ bool WalletImpl::close(bool store)
  
  std::string WalletImpl::seed(const std::string& seed_offset) const
  {
@@ -41,7 +41,7 @@ diff --git a/src/wallet/wallet2.cpp b/src/wallet/wallet2.cpp
 index c9c2dbc82..b827b826f 100644
 --- a/src/wallet/wallet2.cpp
 +++ b/src/wallet/wallet2.cpp
-@@ -1449,11 +1449,13 @@ bool wallet2::get_seed(epee::wipeable_string& electrum_words, const epee::wipeab
+@@ -1428,11 +1428,13 @@ bool wallet2::get_seed(epee::wipeable_string& electrum_words, const epee::wipeab
    bool keys_deterministic = is_deterministic();
    if (!keys_deterministic)
    {
@@ -55,7 +55,7 @@ index c9c2dbc82..b827b826f 100644
      std::cout << "seed_language not set" << std::endl;
      return false;
    }
-@@ -1463,8 +1465,9 @@ bool wallet2::get_seed(epee::wipeable_string& electrum_words, const epee::wipeab
+@@ -1444,8 +1446,9 @@ bool wallet2::get_seed(epee::wipeable_string& electrum_words, const epee::wipeab
      key = cryptonote::encrypt_key(key, passphrase);
    if (!crypto::ElectrumWords::bytes_to_words(key, electrum_words, seed_language))
    {

@@ -15,16 +15,16 @@ index 9406e57b4..1eac121db 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -39,10 +39,6 @@ include(CheckLibraryExists)
- include(CheckFunctionExists)
+ endif()
  include(FindPythonInterp)
  
 -if (IOS)
 -    INCLUDE(CmakeLists_IOS.txt)
 -endif()
 -
- cmake_minimum_required(VERSION 3.5)
- message(STATUS "CMake version ${CMAKE_VERSION}")
+ project(salvium)
  
+ option (USE_CCACHE "Use ccache if a usable instance is found" ON)
 diff --git a/src/checkpoints/CMakeLists.txt b/src/checkpoints/CMakeLists.txt
 index 665441f62..841df3256 100644
 --- a/src/checkpoints/CMakeLists.txt

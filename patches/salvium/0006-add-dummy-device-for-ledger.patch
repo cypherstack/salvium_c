@@ -360,9 +360,9 @@ index bb5b6f497..046201a1e 100644
 -  #ifdef WITH_DEVICE_LEDGER
 +  #if defined(WITH_DEVICE_LEDGER) || defined(HIDAPI_DUMMY)
  
-     #undef MONERO_DEFAULT_LOG_CATEGORY
-     #define MONERO_DEFAULT_LOG_CATEGORY "device.ledger"
-@@ -299,7 +299,7 @@ namespace hw {
+     namespace {
+         bool apdu_verbose =true;
+@@ -300,7 +300,7 @@ namespace hw {
  
      device_ledger::device_ledger(): hw_device(0x0101, 0x05, 64, 2000) {
        this->id = device_id++;
@@ -390,9 +390,9 @@ index 03058c4f1..39454ca6d 100644
  #include "log.hpp"
  #include "device_io_hid.hpp"
 +#include "device_io_dummy.hpp"
- #include <boost/thread/mutex.hpp>
- #include <boost/thread/recursive_mutex.hpp>
+ #include <mutex>
  
+ namespace hw {
 @@ -56,7 +57,7 @@ namespace hw {
  
      void register_all(std::map<std::string, std::unique_ptr<device>> &registry);
@@ -402,8 +402,8 @@ index 03058c4f1..39454ca6d 100644
  
      // Origin: https://github.com/LedgerHQ/ledger-app-monero/blob/master/src/monero_types.h
      #define SW_OK                                   0x9000
-@@ -148,7 +149,11 @@ namespace hw {
-         mutable boost::mutex   command_locker;
+@@ -143,7 +144,11 @@ namespace hw {
+         mutable std::mutex   command_locker;
  
          //IO
 +#if defined(HIDAPI_DUMMY) && !defined(HAVE_HIDAPI)
@@ -428,7 +428,7 @@ index 3fcd6f332..25ade04a7 100644
  
  using namespace std;
  using namespace cryptonote;
-@@ -3178,4 +3181,95 @@ uint64_t WalletImpl::getBytesSent()
+@@ -3186,6 +3189,97 @@ uint64_t WalletImpl::getBytesSent()
      return m_wallet->get_bytes_sent();
  }
  
@@ -523,7 +523,9 @@ index 3fcd6f332..25ade04a7 100644
 +    #endif
 +}
 +
- } // namespace
+ YieldInfo * WalletImpl::getYieldInfo()
+ {
+   auto yi = new YieldInfoImpl(*this);
 diff --git a/src/wallet/api/wallet.h b/src/wallet/api/wallet.h
 index edf8bb8ce..4e9c21ecb 100644
 --- a/src/wallet/api/wallet.h
@@ -573,9 +575,9 @@ index 764adbfbf..53ec4abfc 100644
 +
 +    virtual void setDeviceReceivedData(unsigned char* data, size_t len) = 0;
 +    virtual void setDeviceSendData(unsigned char* data, size_t len) = 0;
- };
  
- /**
+     //! get yield information
+     virtual YieldInfo * getYieldInfo() = 0;
 diff --git a/src/wallet/api/wallet_manager.cpp b/src/wallet/api/wallet_manager.cpp
 index e81b8f83a..277be6ac9 100644
 --- a/src/wallet/api/wallet_manager.cpp

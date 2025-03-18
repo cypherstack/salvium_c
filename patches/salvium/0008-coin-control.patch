@@ -453,7 +453,7 @@ new file mode 100644
 index 000000000..c43e45abd
 --- /dev/null
 +++ b/src/wallet/api/coins_info.h
-@@ -0,3 +1,74 @@
+@@ -0,0 +1,71 @@
 +#ifndef FEATHER_COINS_INFO_H
 +#define FEATHER_COINS_INFO_H
 +

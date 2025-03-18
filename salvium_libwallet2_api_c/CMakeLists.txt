@@ -103,6 +103,9 @@ elseif(${MONERO_FLAVOR} STREQUAL "wownero")
     target_compile_definitions(wallet2_api_c PRIVATE FLAVOR_WOWNERO)
 elseif(${MONERO_FLAVOR} STREQUAL "zano")
     target_compile_definitions(wallet2_api_c PRIVATE FLAVOR_ZANO)
+elseif(${MONERO_FLAVOR} STREQUAL "salvium")
+    target_compile_definitions(wallet2_api_c PRIVATE FLAVOR_SALVIUM)
+    set(BCUR_ENABLED bc-ur)
 endif()
 
 if(NOT ${HOST_ABI} STREQUAL "x86_64-apple-darwin11" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-darwin11" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "x86_64-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "host-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "x86_64-host-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "aarch64-host-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "host-apple-ios" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-ios" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-iossimulator" AND NOT ${HOST_ABI} STREQUAL "x86_64-apple-iossimulator")
@@ -123,6 +126,8 @@ if(${HOST_ABI} STREQUAL "x86_64-apple-darwin11" OR ${HOST_ABI} STREQUAL "aarch64
         set(EXPORTED_SYMBOLS_FILE ${CMAKE_CURRENT_SOURCE_DIR}/wownero_libwallet2_api_c.exp)
     elseif(${MONERO_FLAVOR} STREQUAL "zano")
         set(EXPORTED_SYMBOLS_FILE ${CMAKE_CURRENT_SOURCE_DIR}/zano_libwallet2_api_c.exp)
+    elseif(${MONERO_FLAVOR} STREQUAL "salvium")
+        set(EXPORTED_SYMBOLS_FILE ${CMAKE_CURRENT_SOURCE_DIR}/salvium_libwallet2_api_c.exp)
     endif()
 
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -exported_symbols_list ${EXPORTED_SYMBOLS_FILE}")
@@ -147,6 +152,8 @@ elseif(${MONERO_FLAVOR} STREQUAL "zano")
 
         ${Boost_LIBRARIES}
         ${OpenSSL_LIBRARIES})
+elseif(${MONERO_FLAVOR} STREQUAL "salvium")
+    set(WALLET_TARGETS wallet_api ${wallet_api_LIB_DEPENDS}) # wallet_api_LIB_DEPENDS
 endif()
 
 if(${MONERO_FLAVOR} STREQUAL "wownero")

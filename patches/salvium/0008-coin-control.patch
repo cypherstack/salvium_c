@@ -550,7 +550,7 @@ index 4b0a26a6b..644cf503b 100644
  //    - confirmed_transfer_details)
  
 -PendingTransaction *WalletImpl::createTransactionMultDest(const Monero::transaction_type &tx_type, const std::vector<string> &dst_addr, const string &payment_id, optional<std::vector<uint64_t>> amount, uint32_t mixin_count, const std::string &asset_type, const bool is_return, PendingTransaction::Priority priority, uint32_t subaddr_account, std::set<uint32_t> subaddr_indices)
-+PendingTransaction *WalletImpl::createTransactionMultDest(const Monero::transaction_type &tx_type, const std::vector<string> &dst_addr, const string &payment_id, optional<std::vector<uint64_t>> amount, uint32_t mixin_count, const std::string &asset_type, const bool is_return, PendingTransaction::Priority priority, uint32_t subaddr_account, std::set<uint32_t> subaddr_indices), const std::set<std::string> &preferred_inputs)
++PendingTransaction *WalletImpl::createTransactionMultDest(const Monero::transaction_type &tx_type, const std::vector<string> &dst_addr, const string &payment_id, optional<std::vector<uint64_t>> amount, uint32_t mixin_count, const std::string &asset_type, const bool is_return, PendingTransaction::Priority priority, uint32_t subaddr_account, std::set<uint32_t> subaddr_indices, const std::set<std::string> &preferred_inputs)
  
  {
      clearStatus();
@@ -749,20 +749,7 @@ index 4b0a26a6b..644cf503b 100644
              setStatusError(writer.str());
          } catch (const tools::error::tx_not_possible& e) {
              std::ostringstream writer;
-@@ -2222,10 +2304,10 @@ PendingTransaction *WalletImpl::createTransactionMultDest(const Monero::transact
- }
- 
- PendingTransaction *WalletImpl::createTransaction(const string &dst_addr, const string &payment_id, optional<uint64_t> amount, uint32_t mixin_count,
--                                                  const std::string &asset_type, const bool is_return, PendingTransaction::Priority priority, uint32_t subaddr_account, std::set<uint32_t> subaddr_indices)
-+                                                  const std::string &asset_type, const bool is_return, PendingTransaction::Priority priority, uint32_t subaddr_account, std::set<uint32_t> subaddr_indices, const std::set<std::string> &preferred_inputs)
- 
- {
--  return createTransactionMultDest(Monero::transaction_type::TRANSFER, std::vector<string> {dst_addr}, payment_id, amount ? (std::vector<uint64_t> {*amount}) : (optional<std::vector<uint64_t>>()), mixin_count, asset_type, is_return, priority, subaddr_account, subaddr_indices);
-+  return createTransactionMultDest(Monero::transaction_type::TRANSFER, std::vector<string> {dst_addr}, payment_id, amount ? (std::vector<uint64_t> {*amount}) : (optional<std::vector<uint64_t>>()), mixin_count, asset_type, is_return, priority, subaddr_account, subaddr_indices, preferred_inputs);
- }
- 
- PendingTransaction *WalletImpl::createSweepUnmixableTransaction()
-@@ -2278,6 +2360,16 @@ PendingTransaction *WalletImpl::createSweepUnmixableTransaction()
+@@ -2179,6 +2261,16 @@ PendingTransaction *WalletImpl::createTransactionMultDest(const Monero::transact
                        print_money(e.tx_amount() + e.fee())  %
                        print_money(e.tx_amount()) %
                        print_money(e.fee());
@@ -779,6 +766,19 @@ index 4b0a26a6b..644cf503b 100644
              setStatusError(writer.str());
          } catch (const tools::error::not_enough_outs_to_mix& e) {
              std::ostringstream writer;
+@@ -2222,10 +2304,10 @@ PendingTransaction *WalletImpl::createTransactionMultDest(const Monero::transact
+ }
+ 
+ PendingTransaction *WalletImpl::createTransaction(const string &dst_addr, const string &payment_id, optional<uint64_t> amount, uint32_t mixin_count,
+-                                                  const std::string &asset_type, const bool is_return, PendingTransaction::Priority priority, uint32_t subaddr_account, std::set<uint32_t> subaddr_indices)
++                                                  const std::string &asset_type, const bool is_return, PendingTransaction::Priority priority, uint32_t subaddr_account, std::set<uint32_t> subaddr_indices, const std::set<std::string> &preferred_inputs)
+ 
+ {
+-  return createTransactionMultDest(Monero::transaction_type::TRANSFER, std::vector<string> {dst_addr}, payment_id, amount ? (std::vector<uint64_t> {*amount}) : (optional<std::vector<uint64_t>>()), mixin_count, asset_type, is_return, priority, subaddr_account, subaddr_indices);
++  return createTransactionMultDest(Monero::transaction_type::TRANSFER, std::vector<string> {dst_addr}, payment_id, amount ? (std::vector<uint64_t> {*amount}) : (optional<std::vector<uint64_t>>()), mixin_count, asset_type, is_return, priority, subaddr_account, subaddr_indices, preferred_inputs);
+ }
+ 
+ PendingTransaction *WalletImpl::createSweepUnmixableTransaction()
 @@ -2350,6 +2442,11 @@ AddressBook *WalletImpl::addressBook()
      return m_addressBook.get();
  }

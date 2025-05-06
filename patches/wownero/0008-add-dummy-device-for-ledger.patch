@@ -1,22 +1,21 @@
-From 221fb7ed81aff1830b4bc2d7f9b73c94eb36924a Mon Sep 17 00:00:00 2001
+From 77f328ba6befb9b964f764a27f8a03b71bf9095d Mon Sep 17 00:00:00 2001
 From: Czarek Nakamoto <cyjan@mrcyjanek.net>
 Date: Wed, 26 Jun 2024 15:04:38 +0200
 Subject: [PATCH 08/15] add dummy device for ledger
 
 ---
- CMakeLists.txt                    |   6 +-
- src/device/CMakeLists.txt         |   6 +-
- src/device/device.cpp             |  10 ++-
- src/device/device.hpp             |  12 +--
- src/device/device_io_dummy.cpp    | 133 ++++++++++++++++++++++++++++++
- src/device/device_io_dummy.hpp    |  74 +++++++++++++++++
- src/device/device_ledger.cpp      |   6 +-
- src/device/device_ledger.hpp      |   7 +-
- src/wallet/api/wallet.cpp         |  94 +++++++++++++++++++++
- src/wallet/api/wallet.h           |  18 ++++
- src/wallet/api/wallet2_api.h      |  12 +++
- src/wallet/api/wallet_manager.cpp |  12 ++-
- 12 files changed, 365 insertions(+), 25 deletions(-)
+ CMakeLists.txt                 |   6 +-
+ src/device/CMakeLists.txt      |   6 +-
+ src/device/device.cpp          |  10 ++-
+ src/device/device.hpp          |  12 +--
+ src/device/device_io_dummy.cpp | 133 +++++++++++++++++++++++++++++++++
+ src/device/device_io_dummy.hpp |  74 ++++++++++++++++++
+ src/device/device_ledger.cpp   |   6 +-
+ src/device/device_ledger.hpp   |   7 +-
+ src/wallet/api/wallet.cpp      |  94 +++++++++++++++++++++++
+ src/wallet/api/wallet.h        |  18 +++++
+ src/wallet/api/wallet2_api.h   |  12 +++
+ 11 files changed, 357 insertions(+), 21 deletions(-)
  create mode 100644 src/device/device_io_dummy.cpp
  create mode 100644 src/device/device_io_dummy.hpp
 
@@ -415,7 +414,7 @@ index 03058c4f1..39454ca6d 100644
          unsigned char buffer_send[BUFFER_SEND_SIZE];
          unsigned int  length_recv;
 diff --git a/src/wallet/api/wallet.cpp b/src/wallet/api/wallet.cpp
-index ee000e7ab..556e2a8ce 100644
+index 8bdd75a5a..09f91c5e2 100644
 --- a/src/wallet/api/wallet.cpp
 +++ b/src/wallet/api/wallet.cpp
 @@ -48,6 +48,9 @@
@@ -428,7 +427,7 @@ index ee000e7ab..556e2a8ce 100644
  
  using namespace std;
  using namespace cryptonote;
-@@ -3178,4 +3181,95 @@ uint64_t WalletImpl::getBytesSent()
+@@ -3299,4 +3302,95 @@ uint64_t WalletImpl::getBytesSent()
      return m_wallet->get_bytes_sent();
  }
  
@@ -600,5 +599,5 @@ index e81b8f83a..277be6ac9 100644
  
  std::vector<std::string> WalletManagerImpl::findWallets(const std::string &path)
 -- 
-2.48.0
+2.45.1.windows.1
 

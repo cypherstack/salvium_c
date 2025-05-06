@@ -2299,10 +2299,12 @@ bool MONERO_WalletManager_verifyWalletPassword(void* wm_ptr, const char* keys_fi
 
 //     virtual bool queryWalletDevice(Wallet::Device& device_type, const std::string &keys_file_name, const std::string &password, uint64_t kdf_rounds = 1) const = 0;
 int MONERO_WalletManager_queryWalletDevice(void* wm_ptr, const char* keys_file_name, const char* password, uint64_t kdf_rounds) {
+    DEBUG_START()
     Monero::WalletManager *wm = reinterpret_cast<Monero::WalletManager*>(wm_ptr);
     Monero::Wallet::Device device_type;
     wm->queryWalletDevice(device_type, std::string(keys_file_name), std::string(password), kdf_rounds);
     return device_type;
+    DEBUG_END()
 }
 
 //     virtual std::vector<std::string> findWallets(const std::string &path) = 0;

@@ -1,7 +1,7 @@
-From f9bf382c57e4a36044e7a0697dc36073487eadd3 Mon Sep 17 00:00:00 2001
+From dcb483e5cb97c4e3c500355d8225bd49d3e0ae7f Mon Sep 17 00:00:00 2001
 From: Czarek Nakamoto <cyjan@mrcyjanek.net>
 Date: Thu, 21 Nov 2024 06:05:03 -0500
-Subject: [PATCH 14/15] fix iOS depends build
+Subject: [PATCH 13/14] fix iOS depends build
 
 ---
  CMakeLists.txt                      | 4 ----
@@ -11,7 +11,7 @@ Subject: [PATCH 14/15] fix iOS depends build
  4 files changed, 14 insertions(+), 10 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 763d240fc..e3a0faacd 100644
+index b995a68..4e86328 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -39,10 +39,6 @@ include(CheckLibraryExists)
@@ -26,7 +26,7 @@ index 763d240fc..e3a0faacd 100644
  message(STATUS "CMake version ${CMAKE_VERSION}")
  
 diff --git a/src/checkpoints/CMakeLists.txt b/src/checkpoints/CMakeLists.txt
-index 665441f62..841df3256 100644
+index 665441f..841df32 100644
 --- a/src/checkpoints/CMakeLists.txt
 +++ b/src/checkpoints/CMakeLists.txt
 @@ -28,7 +28,11 @@
@@ -43,7 +43,7 @@ index 665441f62..841df3256 100644
      find_library(IOKIT_LIBRARY IOKit)
      mark_as_advanced(IOKIT_LIBRARY)
 diff --git a/src/cryptonote_basic/CMakeLists.txt b/src/cryptonote_basic/CMakeLists.txt
-index 414936a05..81c81767f 100644
+index 414936a..81c8176 100644
 --- a/src/cryptonote_basic/CMakeLists.txt
 +++ b/src/cryptonote_basic/CMakeLists.txt
 @@ -28,7 +28,11 @@
@@ -60,7 +60,7 @@ index 414936a05..81c81767f 100644
      find_library(IOKIT_LIBRARY IOKit)
      mark_as_advanced(IOKIT_LIBRARY)
 diff --git a/src/cryptonote_basic/miner.cpp b/src/cryptonote_basic/miner.cpp
-index 83bea8b5b..dfb4b5c5a 100644
+index 71b8f78..0f53f02 100644
 --- a/src/cryptonote_basic/miner.cpp
 +++ b/src/cryptonote_basic/miner.cpp
 @@ -45,7 +45,7 @@
@@ -72,7 +72,7 @@ index 83bea8b5b..dfb4b5c5a 100644
    #include <sys/times.h>
    #include <IOKit/IOKitLib.h>
    #include <IOKit/ps/IOPSKeys.h>
-@@ -971,7 +971,7 @@ namespace cryptonote
+@@ -883,7 +883,7 @@ namespace cryptonote
  
        return true;
  
@@ -81,7 +81,7 @@ index 83bea8b5b..dfb4b5c5a 100644
  
        mach_msg_type_number_t count;
        kern_return_t status;
-@@ -1037,7 +1037,7 @@ namespace cryptonote
+@@ -949,7 +949,7 @@ namespace cryptonote
          return true;
        }
  
@@ -90,7 +90,7 @@ index 83bea8b5b..dfb4b5c5a 100644
  
        struct tms tms;
        if ( times(&tms) != (clock_t)-1 )
-@@ -1066,7 +1066,7 @@ namespace cryptonote
+@@ -978,7 +978,7 @@ namespace cryptonote
          return boost::logic::tribool(power_status.ACLineStatus != 1);
      	}
  

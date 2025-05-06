@@ -52,21 +52,6 @@ add_library( wallet2_api_c
              src/main/cpp/helpers.cpp
              src/main/cpp/wallet2_api_c.cpp )
 
-if(${HOST_ABI} STREQUAL "x86_64-linux-android" OR
-   ${HOST_ABI} STREQUAL "i686-linux-android" OR
-   ${HOST_ABI} STREQUAL "aarch64-linux-android" OR
-   ${HOST_ABI} STREQUAL "armv7a-linux-androideabi")
-    set_target_properties(wallet2_api_c PROPERTIES LINK_FLAGS "-Wl,-z,noexecstack")
-endif()
-
-if(${HOST_ABI} STREQUAL "x86_64-linux-gnu" OR
-   ${HOST_ABI} STREQUAL "i686-linux-gnu" OR
-   ${HOST_ABI} STREQUAL "aarch64-linux-gnu" OR
-   ${HOST_ABI} STREQUAL "armv7a-linux-gnu")
-    set_target_properties(wallet2_api_c PROPERTIES LINK_FLAGS "-Wl,-z,noexecstack")
-endif()
-
-
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
 
@@ -82,7 +67,7 @@ elseif(${HOST_ABI} STREQUAL "host-apple-darwin" OR
        ${HOST_ABI} STREQUAL "x86_64-host-apple-darwin" OR
        ${HOST_ABI} STREQUAL "aarch64-host-apple-darwin")
   set(EXTRA_LIBS_APPLE "-framework IOKit" "-framework CoreFoundation" "-framework Cocoa" apple_nghttp2)
-elseif(${HOST_ABI} STREQUAL "host-apple-ios" OR ${HOST_ABI} STREQUAL "aarch64-apple-ios" OR ${HOST_ABI} STREQUAL "arm64-apple-ios" OR ${HOST_ABI} STREQUAL "arm64-apple-iossimulator" OR ${HOST_ABI} STREQUAL "x86_64-apple-iossimulator")
+elseif(${HOST_ABI} STREQUAL "host-apple-ios" OR ${HOST_ABI} STREQUAL "aarch64-apple-ios" OR ${HOST_ABI} STREQUAL "arm64-apple-ios")
   set(EXTRA_LIBS_APPLE "-framework IOKit" "-framework CoreFoundation" iconv )
 endif()
 
@@ -90,33 +75,22 @@ if(${HOST_ABI} STREQUAL "x86_64-w64-mingw32" OR ${HOST_ABI} STREQUAL "i686-w64-m
     target_link_options(wallet2_api_c PRIVATE -static-libgcc -static-libstdc++)
 endif()
 
-if(${HOST_ABI} STREQUAL "x86_64-apple-darwin11" OR ${HOST_ABI} STREQUAL "aarch64-apple-darwin11" OR ${HOST_ABI} STREQUAL "host-apple-darwin" OR ${HOST_ABI} STREQUAL "x86_64-host-apple-darwin" OR ${HOST_ABI} STREQUAL "aarch64-host-apple-darwin" OR ${HOST_ABI} STREQUAL "host-apple-ios" OR ${HOST_ABI} STREQUAL "aarch64-apple-ios" OR ${HOST_ABI} STREQUAL "arm64-apple-iossimulator" OR ${HOST_ABI} STREQUAL "x86_64-apple-iossimulator")
+if(${HOST_ABI} STREQUAL "x86_64-apple-darwin11" OR ${HOST_ABI} STREQUAL "aarch64-apple-darwin11" OR ${HOST_ABI} STREQUAL "host-apple-darwin" OR ${HOST_ABI} STREQUAL "x86_64-host-apple-darwin" OR ${HOST_ABI} STREQUAL "aarch64-host-apple-darwin" OR ${HOST_ABI} STREQUAL "host-apple-ios" OR ${HOST_ABI} STREQUAL "aarch64-apple-ios")
     set_target_properties(wallet2_api_c PROPERTIES SUFFIX ".dylib")
     
     set_target_properties(wallet2_api_c PROPERTIES NO_SONAME 1)
 endif()
 
-if (${MONERO_FLAVOR} STREQUAL "monero")
-    target_compile_definitions(wallet2_api_c PRIVATE FLAVOR_MONERO)
-    set(BCUR_ENABLED bc-ur)
-elseif(${MONERO_FLAVOR} STREQUAL "wownero")
-    target_compile_definitions(wallet2_api_c PRIVATE FLAVOR_WOWNERO)
-elseif(${MONERO_FLAVOR} STREQUAL "zano")
-    target_compile_definitions(wallet2_api_c PRIVATE FLAVOR_ZANO)
-endif()
-
-if(NOT ${HOST_ABI} STREQUAL "x86_64-apple-darwin11" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-darwin11" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "x86_64-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "host-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "x86_64-host-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "aarch64-host-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "host-apple-ios" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-ios" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-iossimulator" AND NOT ${HOST_ABI} STREQUAL "x86_64-apple-iossimulator")
+if(NOT ${HOST_ABI} STREQUAL "x86_64-apple-darwin11" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-darwin11" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "x86_64-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "host-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "x86_64-host-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "aarch64-host-apple-darwin" AND NOT ${HOST_ABI} STREQUAL "host-apple-ios" AND NOT ${HOST_ABI} STREQUAL "aarch64-apple-ios")
     set_target_properties(wallet2_api_c PROPERTIES LINK_FLAGS "-Wl,--exclude-libs,ALL")
 endif()
 
-if (${MONERO_FLAVOR} STREQUAL "zano")
-    include_directories(
-        ${CMAKE_SOURCE_DIR}/build/${HOST_ABI}/zano_build/contrib/zlib
-    )
-endif()
-
 add_subdirectory("${CMAKE_SOURCE_DIR}/../${MONERO_FLAVOR}" ${CMAKE_BINARY_DIR}/${MONERO_FLAVOR}_build EXCLUDE_FROM_ALL)
-if(${HOST_ABI} STREQUAL "x86_64-apple-darwin11" OR ${HOST_ABI} STREQUAL "aarch64-apple-darwin11" OR ${HOST_ABI} STREQUAL "x86_64-apple-darwin" OR ${HOST_ABI} STREQUAL "aarch64-apple-darwin" OR ${HOST_ABI} STREQUAL "host-apple-darwin" OR ${HOST_ABI} STREQUAL "x86_64-host-apple-darwin" OR ${HOST_ABI} STREQUAL "aarch64-host-apple-darwin" OR ${HOST_ABI} STREQUAL "host-apple-ios" OR ${HOST_ABI} STREQUAL "aarch64-apple-ios" OR ${HOST_ABI} STREQUAL "aarch64-apple-iossimulator" OR ${HOST_ABI} STREQUAL "x86_64-apple-iossimulator")
+
+
+
+
+if(${HOST_ABI} STREQUAL "x86_64-apple-darwin11" OR ${HOST_ABI} STREQUAL "aarch64-apple-darwin11" OR ${HOST_ABI} STREQUAL "host-apple-darwin" OR ${HOST_ABI} STREQUAL "x86_64-host-apple-darwin" OR ${HOST_ABI} STREQUAL "aarch64-host-apple-darwin" OR ${HOST_ABI} STREQUAL "host-apple-ios" OR ${HOST_ABI} STREQUAL "aarch64-apple-ios")
     if (${MONERO_FLAVOR} STREQUAL "monero")
         set(EXPORTED_SYMBOLS_FILE ${CMAKE_CURRENT_SOURCE_DIR}/monero_libwallet2_api_c.exp)
     elseif(${MONERO_FLAVOR} STREQUAL "wownero")
@@ -129,26 +103,6 @@ if(${HOST_ABI} STREQUAL "x86_64-apple-darwin11" OR ${HOST_ABI} STREQUAL "aarch64
     set_target_properties(${TARGET} PROPERTIES LINK_DEPENDS ${EXPORTED_SYMBOLS_FILE})
 endif()
 
-if (${MONERO_FLAVOR} STREQUAL "monero")
-    set(WALLET_TARGETS wallet_api ${wallet_api_LIB_DEPENDS}) # wallet_api_LIB_DEPENDS
-elseif(${MONERO_FLAVOR} STREQUAL "wownero")
-    set(WALLET_TARGETS wallet_api ${wallet_api_LIB_DEPENDS}) # wallet_api_LIB_DEPENDS
-elseif(${MONERO_FLAVOR} STREQUAL "zano")
-    find_package(Boost 1.71 REQUIRED COMPONENTS system filesystem thread timer date_time chrono regex serialization atomic program_options)
-    find_package(OpenSSL REQUIRED)
-    set(WALLET_TARGETS 
-        wallet
-        general
-        tor-connect
-        crypto
-        currency_core
-        common    
-        zlibstatic
-
-        ${Boost_LIBRARIES}
-        ${OpenSSL_LIBRARIES})
-endif()
-
 if(${MONERO_FLAVOR} STREQUAL "wownero")
     add_subdirectory(wownero-seed EXCLUDE_FROM_ALL)
     set(EXTRA_LIBS_WOWNEROSEED wownero-seed)
@@ -159,14 +113,11 @@ endif()
 #foreach (_variableName ${_variableNames})
 #    message(STATUS "${_variableName}=${${_variableName}}")
 #endforeach()
-#message(SEND_ERROR "${Boost_LIBRARIES}")
-#message(SEND_ERROR "${WALLET_TARGETS}
-#                        ${EXTRA_LIBS_WOWNEROSEED}
-#                        ${EXTRA_LIBS_ANDROID}")
 
 target_link_libraries(  wallet2_api_c
 
-                        ${WALLET_TARGETS}
+                        wallet_api
                         ${EXTRA_LIBS_WOWNEROSEED}
                         ${EXTRA_LIBS_ANDROID}
+                        ${wallet_api_LIB_DEPENDS}
                        )

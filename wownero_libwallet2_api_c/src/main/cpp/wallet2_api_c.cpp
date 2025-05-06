@@ -2454,12 +2454,8 @@ void* WOWNERO_deprecated_restore14WordSeed(char *path, char *password, char *see
 
 uint64_t WOWNERO_deprecated_14WordSeedHeight(char *seed) {
     DEBUG_START()
-    try {
-        wownero_seed wow_seed(seed, "wownero");
-        return wow_seed.blockheight();
-    } catch(...) {
-        return 1;
-    }
+    wownero_seed wow_seed(seed, "wownero");
+    return wow_seed.blockheight();
     DEBUG_END()
 }
 

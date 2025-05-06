@@ -1,0 +1,36 @@
+<<<<<<<< HEAD:patches/wownero/0005-uint64_t-missing-definition-fix.patch
+From 5a9148c10ea29a42d8aa08d69e2f4559c8611655 Mon Sep 17 00:00:00 2001
+From: Czarek Nakamoto <cyjan@mrcyjanek.net>
+Date: Mon, 2 Sep 2024 16:40:31 +0200
+Subject: [PATCH 05/15] uint64_t missing definition fix
+========
+From 99e6af859234d8b37866e46d95d77e20687767de Mon Sep 17 00:00:00 2001
+From: Czarek Nakamoto <cyjan@mrcyjanek.net>
+Date: Mon, 2 Sep 2024 16:40:31 +0200
+Subject: [PATCH 04/14] uint64_t missing definition fix
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/monero/0004-uint64_t-missing-definition-fix.patch
+
+---
+ contrib/epee/include/net/http_base.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/contrib/epee/include/net/http_base.h b/contrib/epee/include/net/http_base.h
+index 4af4da7..ae4c0d0 100644
+--- a/contrib/epee/include/net/http_base.h
++++ b/contrib/epee/include/net/http_base.h
+@@ -28,7 +28,7 @@
+ 
+ #pragma once
+ #include "memwipe.h"
+-
++#include <stdint.h>
+ #include <boost/utility/string_ref.hpp>
+ 
+ #include <string>
+-- 
+<<<<<<<< HEAD:patches/wownero/0005-uint64_t-missing-definition-fix.patch
+2.48.0
+========
+2.39.5 (Apple Git-154)
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/monero/0004-uint64_t-missing-definition-fix.patch
+

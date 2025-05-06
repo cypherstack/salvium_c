@@ -1,7 +1,14 @@
-From 5a9148c10ea29a42d8aa08d69e2f4559c8611655 Mon Sep 17 00:00:00 2001
+<<<<<<<< HEAD:patches/monero/0003-uint64_t-missing-definition-fix.patch
+From a74f616e3c1671a883182b0db1c6fc11a1242c01 Mon Sep 17 00:00:00 2001
+From: Czarek Nakamoto <cyjan@mrcyjanek.net>
+Date: Mon, 2 Sep 2024 16:40:31 +0200
+Subject: [PATCH 03/14] uint64_t missing definition fix
+========
+From 223e2e4b5b2c6366d0dd4130a726c4cfcdb13ffb Mon Sep 17 00:00:00 2001
 From: Czarek Nakamoto <cyjan@mrcyjanek.net>
 Date: Mon, 2 Sep 2024 16:40:31 +0200
 Subject: [PATCH 05/15] uint64_t missing definition fix
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0005-uint64_t-missing-definition-fix.patch
 
 ---
  contrib/epee/include/net/http_base.h | 2 +-
@@ -21,5 +28,9 @@ index 4af4da790..ae4c0d05e 100644
  
  #include <string>
 -- 
-2.48.0
+<<<<<<<< HEAD:patches/monero/0003-uint64_t-missing-definition-fix.patch
+2.48.1
+========
+2.39.5 (Apple Git-154)
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0005-uint64_t-missing-definition-fix.patch
 

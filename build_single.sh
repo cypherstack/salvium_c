@@ -26,8 +26,8 @@ fi
 
 if [[ "x$repo" != "xwownero" && "x$repo" != "xmonero" && "x$repo" != "xzano" && "x$repo" != "xsalvium" ]];
 then
-    echo "Usage: $0 monero/wownero/zano/salvium $(gcc -dumpmachine) -j$proccount"
-    echo "Invalid target given"
+    echo "Usage: $0 monero/wownero $(gcc -dumpmachine) -j$proccount"
+    echo "Invalid target given, only monero and wownero are supported targets"
     exit 1
 fi
 
@@ -55,12 +55,7 @@ fi
 cd $(dirname $0)
 WDIR=$PWD
 pushd contrib/depends
-    if [[ -d $HOST_ABI ]];
-    then
-        echo "Not building depends, directory exists"
-    else
-        env -i PATH="$PATH" CC=gcc CXX=g++ make "$NPROC" HOST="$HOST_ABI"
-    fi
+    env -i PATH="$PATH" CC=gcc CXX=g++ make "$NPROC" HOST="$HOST_ABI"
 popd
 
 buildType=Debug
@@ -73,7 +68,7 @@ pushd ${repo}_libwallet2_api_c
        EXTRA_CMAKE_FLAGS="-DCAKEWALLET=ON"
     fi
     pushd build/${HOST_ABI}
-        cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/../../../contrib/depends/${HOST_ABI}/share/toolchain.cmake $EXTRA_CMAKE_FLAGS -DUSE_DEVICE_TREZOR=OFF -DMONERO_FLAVOR=$repo -DCMAKE_BUILD_TYPE=Debug -DHOST_ABI=${HOST_ABI} ../..
+        cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/../../../contrib/depends/${HOST_ABI}/share/toolchain.cmake -DUSE_DEVICE_TREZOR=OFF -DMONERO_FLAVOR=$repo -DCMAKE_BUILD_TYPE=Debug -DHOST_ABI=${HOST_ABI} ../..
         make $NPROC
     popd
 popd
@@ -88,7 +83,7 @@ pushd release/$repo
         # cp ../../$repo/build/${HOST_ABI}/external/polyseed/libpolyseed.${APPENDIX} ${HOST_ABI}_libpolyseed.${APPENDIX}
         # rm ${HOST_ABI}_libpolyseed.${APPENDIX}.xz || true
         # xz -e ${HOST_ABI}_libpolyseed.${APPENDIX}
-    elif [[ "${HOST_ABI}" == "x86_64-apple-darwin11" || "${HOST_ABI}" == "aarch64-apple-darwin11" || "${HOST_ABI}" == "host-apple-darwin" || "${HOST_ABI}" == "x86_64-host-apple-darwin" || "${HOST_ABI}" == "aarch64-apple-darwin"  || "${HOST_ABI}" == "x86_64-apple-darwin" || "${HOST_ABI}" == "host-apple-ios" || "${HOST_ABI}" == "aarch64-apple-ios" || "${HOST_ABI}" == "aarch64-apple-iossimulator" ]];
+    elif [[ "${HOST_ABI}" == "x86_64-apple-darwin11" || "${HOST_ABI}" == "aarch64-apple-darwin11" || "${HOST_ABI}" == "host-apple-darwin" || "${HOST_ABI}" == "x86_64-host-apple-darwin" || "${HOST_ABI}" == "aarch64-apple-darwin"  || "${HOST_ABI}" == "x86_64-apple-darwin" || "${HOST_ABI}" == "host-apple-ios" || "${HOST_ABI}" == "aarch64-apple-ios" ]];
     then
         APPENDIX="${APPENDIX}dylib"
     else

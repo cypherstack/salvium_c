@@ -1,4 +1,38 @@
-From d146c6c1e23e1bf3762449e72a3aab847b3c0412 Mon Sep 17 00:00:00 2001
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+From c54ab3f0984159bd47c63b78074caaaac082727a Mon Sep 17 00:00:00 2001
+From: tobtoht <tob@featherwallet.org>
+Date: Tue, 12 Mar 2024 09:42:37 +0100
+Subject: [PATCH 07/14] polyseed
+
+Co-authored-by: Czarek Nakamoto <cyjan@mrcyjanek.net>
+---
+ .gitmodules                            |   6 +
+ CMakeLists.txt                         |   4 +-
+ contrib/epee/include/wipeable_string.h |   7 +
+ contrib/epee/src/wipeable_string.cpp   |  10 ++
+ external/CMakeLists.txt                |   2 +
+ external/polyseed                      |   1 +
+ external/utf8proc                      |   1 +
+ src/CMakeLists.txt                     |   1 +
+ src/cryptonote_basic/CMakeLists.txt    |   1 +
+ src/cryptonote_basic/account.cpp       |  23 +++-
+ src/cryptonote_basic/account.h         |   6 +
+ src/cryptonote_config.h                |   2 +
+ src/polyseed/CMakeLists.txt            |  25 ++++
+ src/polyseed/pbkdf2.c                  |  85 ++++++++++++
+ src/polyseed/pbkdf2.h                  |  46 +++++++
+ src/polyseed/polyseed.cpp              | 182 +++++++++++++++++++++++++
+ src/polyseed/polyseed.hpp              | 167 +++++++++++++++++++++++
+ src/wallet/api/wallet.cpp              |  70 ++++++++++
+ src/wallet/api/wallet.h                |  10 ++
+ src/wallet/api/wallet2_api.h           |  25 ++++
+ src/wallet/api/wallet_manager.cpp      |   9 ++
+ src/wallet/api/wallet_manager.h        |  10 ++
+ src/wallet/wallet2.cpp                 | 100 ++++++++++++--
+ src/wallet/wallet2.h                   |  30 +++-
+ 24 files changed, 805 insertions(+), 18 deletions(-)
+========
+From c1f5cc2d9b71b7b923b17c33c23b23da918e4751 Mon Sep 17 00:00:00 2001
 From: tobtoht <tob@featherwallet.org>
 Date: Tue, 12 Mar 2024 09:42:37 +0100
 Subject: [PATCH 09/15] polyseed
@@ -40,6 +74,7 @@ Co-authored-by: Czarek Nakamoto <cyjan@mrcyjanek.net>
  create mode 100644 contrib/depends/packages/polyseed.mk
  create mode 100644 contrib/depends/patches/polyseed/0001-disable-soname.patch
  create mode 100644 contrib/depends/patches/polyseed/force-static-mingw.patch
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
  create mode 160000 external/polyseed
  create mode 160000 external/utf8proc
  create mode 100644 src/polyseed/CMakeLists.txt
@@ -49,6 +84,15 @@ Co-authored-by: Czarek Nakamoto <cyjan@mrcyjanek.net>
  create mode 100644 src/polyseed/polyseed.hpp
 
 diff --git a/.gitmodules b/.gitmodules
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+index 72af74d55..b838e84e0 100644
+--- a/.gitmodules
++++ b/.gitmodules
+@@ -11,6 +11,12 @@
+ 	path = external/randomx
+ 	url = https://github.com/MrCyjaneK/RandomX
+ 	branch = cyjan-fix-ios
+========
 index b24855d9b..589676649 100644
 --- a/.gitmodules
 +++ b/.gitmodules
@@ -56,6 +100,7 @@ index b24855d9b..589676649 100644
  	path = external/bc-ur
  	url = https://github.com/MrCyjaneK/bc-ur
  	branch = misc
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
 +[submodule "external/utf8proc"]
 +	path = external/utf8proc
 +	url = https://github.com/JuliaStrings/utf8proc.git
@@ -64,21 +109,36 @@ index b24855d9b..589676649 100644
 +	url = https://github.com/tevador/polyseed.git
 \ No newline at end of file
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 86000f811..96056e324 100644
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+index 5c0f31cb8..f0630ef9b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -371,6 +371,8 @@ if(NOT MANUAL_SUBMODULES)
+     check_submodule(external/trezor-common)
+     check_submodule(external/randomx)
+========
+index abe44eca5..85a62ef7b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -372,6 +372,8 @@ if(NOT MANUAL_SUBMODULES)
      #check_submodule(external/trezor-common)
      check_submodule(external/randomwow)
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
      check_submodule(external/supercop)
 +    check_submodule(external/polyseed)
 +    check_submodule(external/utf8proc)
    endif()
  endif()
  
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+@@ -460,7 +462,7 @@ endif()
+   set(BSDI TRUE)
+ endif()
+========
 @@ -461,7 +463,7 @@ endif()
  # elseif(CMAKE_SYSTEM_NAME MATCHES ".*BSDI.*")
  #   set(BSDI TRUE)
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
  
 -include_directories(external/rapidjson/include external/easylogging++ src contrib/epee/include external external/supercop/include)
 +include_directories(external/rapidjson/include external/easylogging++ src contrib/epee/include external external/supercop/include external/polyseed/include external/utf8proc)
@@ -307,16 +367,30 @@ index b016f2f48..f2f365b1b 100644
 +
  }
 diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
-index dfdffe67c..fa98f61b5 100644
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+index 074e23f16..f7e35f98f 100644
 --- a/external/CMakeLists.txt
 +++ b/external/CMakeLists.txt
-@@ -70,4 +70,6 @@ add_subdirectory(db_drivers)
+@@ -70,5 +70,7 @@ endif()
+ add_subdirectory(db_drivers)
+ add_subdirectory(easylogging++)
+ add_subdirectory(qrcodegen)
++add_subdirectory(polyseed EXCLUDE_FROM_ALL)
++add_subdirectory(utf8proc EXCLUDE_FROM_ALL)
+ add_subdirectory(bc-ur)
+ add_subdirectory(randomx EXCLUDE_FROM_ALL)
+========
+index 88a7bb0b5..95be500b1 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -73,4 +73,6 @@ add_subdirectory(db_drivers)
  add_subdirectory(easylogging++)
  add_subdirectory(qrcodegen)
  add_subdirectory(bc-ur)
 +add_subdirectory(polyseed EXCLUDE_FROM_ALL)
 +add_subdirectory(utf8proc EXCLUDE_FROM_ALL)
  add_subdirectory(randomwow EXCLUDE_FROM_ALL)
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
 diff --git a/external/polyseed b/external/polyseed
 new file mode 160000
 index 000000000..bd79f5014
@@ -332,7 +406,7 @@ index 000000000..3de4596fb
 @@ -0,0 +1 @@
 +Subproject commit 3de4596fbe28956855df2ecb3c11c0bbc3535838
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 9216bcaa5..c043ba150 100644
+index 3335d3c21..06b708cf0 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -95,6 +95,7 @@ add_subdirectory(net)
@@ -352,9 +426,9 @@ index 1414be1b2..414936a05 100644
      cryptonote_format_utils_basic
      device
 +    polyseed_wrapper
+     oracle
      ${Boost_DATE_TIME_LIBRARY}
      ${Boost_PROGRAM_OPTIONS_LIBRARY}
-     ${Boost_SERIALIZATION_LIBRARY}
 diff --git a/src/cryptonote_basic/account.cpp b/src/cryptonote_basic/account.cpp
 index 4e87d4477..2d556f285 100644
 --- a/src/cryptonote_basic/account.cpp
@@ -447,18 +521,22 @@ index 93d1d28f0..1f76febce 100644
      const account_keys& get_keys() const;
      std::string get_public_address_str(network_type nettype) const;
 diff --git a/src/cryptonote_config.h b/src/cryptonote_config.h
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+index 82891b9de..26200bf34 100644
+========
 index 8b5091a46..d9151e8d2 100644
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
 --- a/src/cryptonote_config.h
 +++ b/src/cryptonote_config.h
-@@ -219,6 +219,8 @@
+@@ -265,6 +265,8 @@
  
  #define DNS_BLOCKLIST_LIFETIME (86400 * 8)
  
-+#define POLYSEED_COIN POLYSEED_WOWNERO
++#define POLYSEED_COIN POLYSEED_MONERO
 +
- //The limit is enough for the mandatory transaction content with 16 outputs (547 bytes),
- //a custom tag (1 byte) and up to 32 bytes of custom data for each recipient.
- // (1+32) + (1+1+16*32) + (1+16*32) = 1060
+ #define PRICING_RECORD_VALID_BLOCKS                     10
+ #define PRICING_RECORD_VALID_TIME_DIFF_FROM_BLOCK       120  // seconds
+ 
 diff --git a/src/polyseed/CMakeLists.txt b/src/polyseed/CMakeLists.txt
 new file mode 100644
 index 000000000..cca4eb746
@@ -998,7 +1076,11 @@ index 000000000..2c8c777a7
 +#endif //POLYSEED_HPP
 \ No newline at end of file
 diff --git a/src/wallet/api/wallet.cpp b/src/wallet/api/wallet.cpp
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+index 25ade04a7..51911bf99 100644
+========
 index 556e2a8ce..704e5e148 100644
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
 --- a/src/wallet/api/wallet.cpp
 +++ b/src/wallet/api/wallet.cpp
 @@ -728,6 +728,28 @@ bool WalletImpl::recoverFromDevice(const std::string &path, const std::string &p
@@ -1194,7 +1276,11 @@ index a223e1df9..28fcd36c9 100644
      bool walletExists(const std::string &path) override;
      bool verifyWalletPassword(const std::string &keys_file_name, const std::string &password, bool no_spend_key, uint64_t kdf_rounds = 1) const override;
 diff --git a/src/wallet/wallet2.cpp b/src/wallet/wallet2.cpp
-index e14d4d2fc..fd4094360 100644
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+index 765cefb32..806de969a 100644
+========
+index 671fa5298..3e49c21f8 100644
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
 --- a/src/wallet/wallet2.cpp
 +++ b/src/wallet/wallet2.cpp
 @@ -92,6 +92,7 @@ using namespace epee;
@@ -1205,17 +1291,26 @@ index e14d4d2fc..fd4094360 100644
  
  extern "C"
  {
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+@@ -1273,7 +1274,8 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended, std
+   m_send_change_back_to_subaddress(false),
+========
 @@ -1278,7 +1279,8 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended, std
    m_enable_multisig(false),
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
    m_pool_info_query_time(0),
    m_has_ever_refreshed_from_node(false),
--  m_allow_mismatched_daemon_version(true)
-+  m_allow_mismatched_daemon_version(true),
+-  m_allow_mismatched_daemon_version(false)
++  m_allow_mismatched_daemon_version(false),
 +  m_polyseed(false)
  {
    set_rpc_client_secret_key(rct::rct2sk(rct::skGen()));
  }
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
 @@ -1483,6 +1485,20 @@ bool wallet2::get_seed(epee::wipeable_string& electrum_words, const epee::wipeab
+========
+@@ -1474,6 +1476,20 @@ bool wallet2::get_seed(epee::wipeable_string& electrum_words, const epee::wipeab
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
    return true;
  }
  //----------------------------------------------------------------------------------------------------
@@ -1236,25 +1331,42 @@ index e14d4d2fc..fd4094360 100644
  bool wallet2::get_multisig_seed(epee::wipeable_string& seed, const epee::wipeable_string &passphrase) const
  {
    bool ready;
-@@ -4801,6 +4817,9 @@ boost::optional<wallet2::keys_file_data> wallet2::get_keys_file_data(const crypt
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+@@ -5313,6 +5329,9 @@ boost::optional<wallet2::keys_file_data> wallet2::get_keys_file_data(const crypt
+========
+@@ -4792,6 +4808,9 @@ boost::optional<wallet2::keys_file_data> wallet2::get_keys_file_data(const crypt
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
    value2.SetInt(m_enable_multisig ? 1 : 0);
    json.AddMember("enable_multisig", value2, json.GetAllocator());
  
 +  value2.SetInt(m_polyseed ? 1 : 0);
 +  json.AddMember("polyseed", value2, json.GetAllocator());
 +
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+   value2.SetInt(m_freeze_incoming_payments ? 1 : 0);
+   json.AddMember("freeze_incoming_payments", value2, json.GetAllocator());
+ 
+@@ -5560,6 +5579,7 @@ bool wallet2::load_keys_buf(const std::string& keys_buf, const epee::wipeable_st
+     m_send_change_back_to_subaddress = false;
+     m_allow_mismatched_daemon_version = false;
+========
    if (m_background_sync_type == BackgroundSyncCustomPassword && !background_keys_file && m_custom_background_key)
    {
      value.SetString(reinterpret_cast<const char*>(m_custom_background_key.get().data()), m_custom_background_key.get().size());
-@@ -5040,6 +5059,7 @@ bool wallet2::load_keys_buf(const std::string& keys_buf, const epee::wipeable_st
+@@ -5031,6 +5050,7 @@ bool wallet2::load_keys_buf(const std::string& keys_buf, const epee::wipeable_st
      m_enable_multisig = false;
      m_allow_mismatched_daemon_version = true;
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
      m_custom_background_key = boost::none;
 +    m_polyseed = false;
    }
    else if(json.IsObject())
    {
-@@ -5280,6 +5300,9 @@ bool wallet2::load_keys_buf(const std::string& keys_buf, const epee::wipeable_st
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+@@ -5804,6 +5824,9 @@ bool wallet2::load_keys_buf(const std::string& keys_buf, const epee::wipeable_st
+========
+@@ -5271,6 +5291,9 @@ bool wallet2::load_keys_buf(const std::string& keys_buf, const epee::wipeable_st
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
      GET_FIELD_FROM_JSON_RETURN_ON_ERROR(json, background_sync_type, BackgroundSyncType, Int, false, BackgroundSyncOff);
      m_background_sync_type = field_background_sync_type;
  
@@ -1264,7 +1376,11 @@ index e14d4d2fc..fd4094360 100644
      // Load encryption key used to encrypt background cache
      crypto::chacha_key custom_background_key;
      m_custom_background_key = boost::none;
-@@ -5599,6 +5622,48 @@ void wallet2::init_type(hw::device::device_type device_type)
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+@@ -6123,6 +6146,48 @@ void wallet2::init_type(hw::device::device_type device_type)
+========
+@@ -5590,6 +5613,48 @@ void wallet2::init_type(hw::device::device_type device_type)
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
    m_key_device_type = device_type;
  }
  
@@ -1313,7 +1429,11 @@ index e14d4d2fc..fd4094360 100644
  /*!
   * \brief  Generates a wallet or restores one. Assumes the multisig setup
   *         has already completed for the provided multisig info.
-@@ -5726,7 +5791,7 @@ crypto::secret_key wallet2::generate(const std::string& wallet_, const epee::wip
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+@@ -6250,7 +6315,7 @@ crypto::secret_key wallet2::generate(const std::string& wallet_, const epee::wip
+========
+@@ -5717,7 +5782,7 @@ crypto::secret_key wallet2::generate(const std::string& wallet_, const epee::wip
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
    return retval;
  }
  
@@ -1322,7 +1442,11 @@ index e14d4d2fc..fd4094360 100644
   {
     // -1 month for fluctuations in block time and machine date/time setup.
     // avg seconds per block
-@@ -5750,7 +5815,7 @@ crypto::secret_key wallet2::generate(const std::string& wallet_, const epee::wip
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+@@ -6274,7 +6339,7 @@ crypto::secret_key wallet2::generate(const std::string& wallet_, const epee::wip
+========
+@@ -5741,7 +5806,7 @@ crypto::secret_key wallet2::generate(const std::string& wallet_, const epee::wip
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
     // the daemon is currently syncing.
     // If we use the approximate height we subtract one month as
     // a safety margin.
@@ -1331,19 +1455,38 @@ index e14d4d2fc..fd4094360 100644
     uint64_t target_height = get_daemon_blockchain_target_height(err);
     if (err.empty()) {
       if (target_height < height)
-@@ -13643,9 +13708,10 @@ uint64_t wallet2::get_daemon_blockchain_target_height(string &err)
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+@@ -13926,7 +13991,7 @@ uint64_t wallet2::get_daemon_blockchain_target_height(string &err)
+========
+@@ -13634,9 +13699,10 @@ uint64_t wallet2::get_daemon_blockchain_target_height(string &err)
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
    return target_height;
  }
  
 -uint64_t wallet2::get_approximate_blockchain_height() const
 +uint64_t wallet2::get_approximate_blockchain_height(uint64_t t) const
  {
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+   if (m_nettype != MAINNET) return 0;
+   
+@@ -13937,7 +14002,7 @@ uint64_t wallet2::get_approximate_blockchain_height() const
+   // avg seconds per block
+   const int seconds_per_block = DIFFICULTY_TARGET_V2;
+   // Calculated blockchain height
+-  uint64_t approx_blockchain_height = fork_block + (time(NULL) - fork_time)/seconds_per_block;
++  uint64_t approx_blockchain_height = fork_block + ((t > 0 ? t : time(NULL)) - fork_time)/seconds_per_block;
+   LOG_PRINT_L2("Calculated blockchain height: " << approx_blockchain_height);
+   return approx_blockchain_height;
+ }
+@@ -16112,15 +16177,6 @@ bool wallet2::parse_uri(const std::string &uri, std::string &address, std::strin
+========
    uint64_t approx_blockchain_height = m_nettype == TESTNET ? 0 : (time(NULL) - 1522624244)/307;
 +  // uint64_t approx_blockchain_height = fork_block + ((t > 0 ? t : time(NULL)) - fork_time)/seconds_per_block;
    LOG_PRINT_L2("Calculated blockchain height: " << approx_blockchain_height);
    return approx_blockchain_height;
  }
-@@ -15780,15 +15846,6 @@ bool wallet2::parse_uri(const std::string &uri, std::string &address, std::strin
+@@ -15771,15 +15837,6 @@ bool wallet2::parse_uri(const std::string &uri, std::string &address, std::strin
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
  //----------------------------------------------------------------------------------------------------
  uint64_t wallet2::get_blockchain_height_by_date(uint16_t year, uint8_t month, uint8_t day)
  {
@@ -1359,7 +1502,11 @@ index e14d4d2fc..fd4094360 100644
    std::tm date = { 0, 0, 0, 0, 0, 0, 0, 0 };
    date.tm_year = year - 1900;
    date.tm_mon  = month - 1;
-@@ -15797,7 +15854,23 @@ uint64_t wallet2::get_blockchain_height_by_date(uint16_t year, uint8_t month, ui
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+@@ -16129,7 +16185,23 @@ uint64_t wallet2::get_blockchain_height_by_date(uint16_t year, uint8_t month, ui
+========
+@@ -15788,7 +15845,23 @@ uint64_t wallet2::get_blockchain_height_by_date(uint16_t year, uint8_t month, ui
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
    {
      throw std::runtime_error("month or day out of range");
    }
@@ -1384,7 +1531,11 @@ index e14d4d2fc..fd4094360 100644
    uint64_t height_min = 0;
    uint64_t height_max = get_daemon_blockchain_height(err) - 1;
 diff --git a/src/wallet/wallet2.h b/src/wallet/wallet2.h
-index 746e2aeff..c165acb9d 100644
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+index a752f15b9..a619bdd15 100644
+========
+index 80ff0698d..c26349ce3 100644
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
 --- a/src/wallet/wallet2.h
 +++ b/src/wallet/wallet2.h
 @@ -72,6 +72,7 @@
@@ -1416,7 +1567,11 @@ index 746e2aeff..c165acb9d 100644
      /*!
       * \brief Generates a wallet or restores one.
       * \param  wallet_              Name of wallet file
-@@ -1095,6 +1110,15 @@ private:
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+@@ -1126,6 +1141,15 @@ private:
+========
+@@ -1088,6 +1103,15 @@ private:
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
      bool is_deterministic() const;
      bool get_seed(epee::wipeable_string& electrum_words, const epee::wipeable_string &passphrase = epee::wipeable_string()) const;
  
@@ -1430,9 +1585,15 @@ index 746e2aeff..c165acb9d 100644
 +    bool get_polyseed(epee::wipeable_string& seed, epee::wipeable_string &passphrase) const;
 +
      /*!
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+      * \brief Gets the seed language
+      */
+@@ -1562,8 +1586,8 @@ private:
+========
      * \brief Checks if light wallet. A light wallet sends view key to a server where the blockchain is scanned.
      */
-@@ -1562,8 +1586,8 @@ private:
+@@ -1555,8 +1579,8 @@ private:
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
     /*!
      * \brief Calculates the approximate blockchain height from current date/time.
      */
@@ -1443,7 +1604,11 @@ index 746e2aeff..c165acb9d 100644
      std::vector<size_t> select_available_outputs_from_histogram(uint64_t count, bool atleast, bool unlocked, bool allow_rct);
      std::vector<size_t> select_available_outputs(const std::function<bool(const transfer_details &td)> &f);
      std::vector<size_t> select_available_unmixable_outputs();
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
 @@ -1657,6 +1681,7 @@ private:
+========
+@@ -1650,6 +1674,7 @@ private:
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
      bool parse_uri(const std::string &uri, std::string &address, std::string &payment_id, uint64_t &amount, std::string &tx_description, std::string &recipient_name, std::vector<std::string> &unknown_parameters, std::string &error);
  
      uint64_t get_blockchain_height_by_date(uint16_t year, uint8_t month, uint8_t day);    // 1<=month<=12, 1<=day<=31
@@ -1451,7 +1616,11 @@ index 746e2aeff..c165acb9d 100644
  
      bool is_synced();
  
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
 @@ -2003,6 +2028,7 @@ private:
+========
+@@ -1995,6 +2020,7 @@ private:
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
      std::string seed_language; /*!< Language of the mnemonics (seed). */
      bool is_old_file_format; /*!< Whether the wallet file is of an old file format */
      bool m_watch_only; /*!< no spend key */
@@ -1460,5 +1629,9 @@ index 746e2aeff..c165acb9d 100644
      uint32_t m_multisig_threshold;
      std::vector<crypto::public_key> m_multisig_signers;
 -- 
-2.48.0
+<<<<<<<< HEAD:patches/salvium/0007-polyseed.patch
+2.48.1
+========
+2.39.5 (Apple Git-154)
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0009-polyseed.patch
 

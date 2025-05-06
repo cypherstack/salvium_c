@@ -1,7 +1,14 @@
-From ad28016bf3cfd11242dc14472389f7a006c73dcf Mon Sep 17 00:00:00 2001
+<<<<<<<< HEAD:patches/monero/0010-Add-recoverDeterministicWalletFromSpendKey.patch
+From cb02355313d504e6a44f8f70b8eb2be64167ffd4 Mon Sep 17 00:00:00 2001
+From: Konstantin Ullrich <konstantinullrich12@gmail.com>
+Date: Wed, 11 Oct 2023 16:47:59 +0200
+Subject: [PATCH 10/14] Add recoverDeterministicWalletFromSpendKey
+========
+From 298c7e0745306605d7ed1cee320b92eacf8aaeb6 Mon Sep 17 00:00:00 2001
 From: Konstantin Ullrich <konstantinullrich12@gmail.com>
 Date: Wed, 11 Oct 2023 16:47:59 +0200
 Subject: [PATCH 12/15] Add recoverDeterministicWalletFromSpendKey
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0012-Add-recoverDeterministicWalletFromSpendKey.patch
 
 This function is used by Cake Wallet to enable polyseed (dart implementation)
 support.
@@ -19,7 +26,11 @@ Co-authored-by: Godwin Asuquo <godilite@gmail.com>
  5 files changed, 75 insertions(+)
 
 diff --git a/src/wallet/api/wallet.cpp b/src/wallet/api/wallet.cpp
+<<<<<<<< HEAD:patches/monero/0010-Add-recoverDeterministicWalletFromSpendKey.patch
+index 933cc2531..d8fe108b4 100644
+========
 index e69910e69..e650e6044 100644
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0012-Add-recoverDeterministicWalletFromSpendKey.patch
 --- a/src/wallet/api/wallet.cpp
 +++ b/src/wallet/api/wallet.cpp
 @@ -824,6 +824,35 @@ bool WalletImpl::recover(const std::string &path, const std::string &password, c
@@ -149,5 +160,9 @@ index 28fcd36c9..be3ff8184 100644
                                              const std::string &password,
                                              NetworkType nettype,
 -- 
-2.48.0
+<<<<<<<< HEAD:patches/monero/0010-Add-recoverDeterministicWalletFromSpendKey.patch
+2.48.1
+========
+2.39.5 (Apple Git-154)
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0012-Add-recoverDeterministicWalletFromSpendKey.patch
 

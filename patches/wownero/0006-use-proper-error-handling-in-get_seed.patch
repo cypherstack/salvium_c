@@ -1,7 +1,14 @@
-From ee6aa49179833c930c1ec10ae2e877aeb87eb8c8 Mon Sep 17 00:00:00 2001
+<<<<<<<< HEAD:patches/monero/0004-use-proper-error-handling-in-get_seed.patch
+From f9b222f1611d7cfbaf0ac52cd6194724c7554def Mon Sep 17 00:00:00 2001
+From: Czarek Nakamoto <cyjan@mrcyjanek.net>
+Date: Mon, 24 Jun 2024 10:49:12 +0200
+Subject: [PATCH 04/14] use proper error handling in get_seed
+========
+From 776d22d6dc47739074f004979894f3c62d43a0c9 Mon Sep 17 00:00:00 2001
 From: Czarek Nakamoto <cyjan@mrcyjanek.net>
 Date: Mon, 24 Jun 2024 10:49:12 +0200
 Subject: [PATCH 06/15] use proper error handling in get_seed
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0006-use-proper-error-handling-in-get_seed.patch
 
 ---
  src/wallet/api/wallet.cpp | 17 ++++++++++++-----
@@ -9,7 +16,11 @@ Subject: [PATCH 06/15] use proper error handling in get_seed
  2 files changed, 16 insertions(+), 6 deletions(-)
 
 diff --git a/src/wallet/api/wallet.cpp b/src/wallet/api/wallet.cpp
+<<<<<<<< HEAD:patches/monero/0004-use-proper-error-handling-in-get_seed.patch
+index 67b170e3d..89df5c517 100644
+========
 index 899ef044a..e16d8f83f 100644
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0006-use-proper-error-handling-in-get_seed.patch
 --- a/src/wallet/api/wallet.cpp
 +++ b/src/wallet/api/wallet.cpp
 @@ -826,12 +826,19 @@ bool WalletImpl::close(bool store)
@@ -38,10 +49,17 @@ index 899ef044a..e16d8f83f 100644
  
  std::string WalletImpl::getSeedLanguage() const
 diff --git a/src/wallet/wallet2.cpp b/src/wallet/wallet2.cpp
-index 4e66cdeae..48267d647 100644
+<<<<<<<< HEAD:patches/monero/0004-use-proper-error-handling-in-get_seed.patch
+index c9c2dbc82..b827b826f 100644
 --- a/src/wallet/wallet2.cpp
 +++ b/src/wallet/wallet2.cpp
 @@ -1449,11 +1449,13 @@ bool wallet2::get_seed(epee::wipeable_string& electrum_words, const epee::wipeab
+========
+index 651161d14..1e527cf97 100644
+--- a/src/wallet/wallet2.cpp
++++ b/src/wallet/wallet2.cpp
+@@ -1440,11 +1440,13 @@ bool wallet2::get_seed(epee::wipeable_string& electrum_words, const epee::wipeab
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0006-use-proper-error-handling-in-get_seed.patch
    bool keys_deterministic = is_deterministic();
    if (!keys_deterministic)
    {
@@ -55,7 +73,11 @@ index 4e66cdeae..48267d647 100644
      std::cout << "seed_language not set" << std::endl;
      return false;
    }
+<<<<<<<< HEAD:patches/monero/0004-use-proper-error-handling-in-get_seed.patch
 @@ -1463,8 +1465,9 @@ bool wallet2::get_seed(epee::wipeable_string& electrum_words, const epee::wipeab
+========
+@@ -1454,8 +1456,9 @@ bool wallet2::get_seed(epee::wipeable_string& electrum_words, const epee::wipeab
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0006-use-proper-error-handling-in-get_seed.patch
      key = cryptonote::encrypt_key(key, passphrase);
    if (!crypto::ElectrumWords::bytes_to_words(key, electrum_words, seed_language))
    {
@@ -67,5 +89,9 @@ index 4e66cdeae..48267d647 100644
  
    return true;
 -- 
-2.48.0
+<<<<<<<< HEAD:patches/monero/0004-use-proper-error-handling-in-get_seed.patch
+2.48.1
+========
+2.39.5 (Apple Git-154)
+>>>>>>>> e3d763b (cleanup patches (and other stuff) (#79)):patches/wownero/0006-use-proper-error-handling-in-get_seed.patch
 

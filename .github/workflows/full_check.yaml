@@ -64,8 +64,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        coin: [monero, wownero, zano]
-    runs-on: ubuntu-22.04
+        coin: [monero, wownero]
+    runs-on: ubuntu-24.04
     # container:
     #   image: debian:bookworm
     steps:
@@ -210,7 +210,7 @@ jobs:
           xcode-version: '15.4'
       - name: install dependencies
         run: |
-          brew install ccache binutils pigz autoconf automake libtool pkg-config
+          brew install ccache binutils pigz autoconf automake libtool
       - name: Patch sources
         run: |
           git config --global --add safe.directory '*'
@@ -289,14 +289,9 @@ jobs:
           path: |
             contrib/depends/built/*
           key: depends-${{ github.job }}-${{ hashFiles('contrib/depends/packages/*.mk') }}
-      - name: build (aarch64-apple-ios)
+      - name: build
         run: |
           ./build_single.sh ${{ matrix.coin }} aarch64-apple-ios -j$(sysctl -n hw.logicalcpu)
-
-      - name: build (aarch64-apple-iossimulator)
-        run: |
-          ./build_single.sh ${{ matrix.coin }} aarch64-apple-iossimulator -j$(sysctl -n hw.logicalcpu)
-
       - name: rename artifacts
         run: |
           mkdir release/gh/
@@ -330,10 +325,6 @@ jobs:
         with:
           name: android wownero
           path: release/wownero
-      - uses: actions/download-artifact@v4
-        with:
-          name: android zano
-          path: release/zano
       - uses: actions/download-artifact@v4
         with:
           name: ios monero

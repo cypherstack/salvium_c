@@ -9,7 +9,8 @@ TL;DR:
 ```bash
 $ rm -rf monero wownero release
 $ git submodule update --init --recursive --force
-$ for coin in monero wownero zano; do ./apply_patches.sh $coin; done
+$ for coin in monero wownero; do ./apply_patches.sh $coin; done
+$ ./build_single monero $(gcc -dumpmachine) -j$(nproc)
 ```
 
 Broken? Not working? Need help? https://moneroc.mrcyjanek.net/

@@ -111,10 +111,6 @@ export class Wallet {
     );
   }
 
-  async setRefreshFromBlockHeight(height = 0n): Promise<void> {
-    return await fns.Wallet_setRefreshFromBlockHeight(this.#ptr, height);
-  }
-
   async balance(accountIndex = 0): Promise<bigint> {
     return await fns.Wallet_balance(this.#ptr, accountIndex);
   }
@@ -290,8 +286,8 @@ export class Wallet {
     preferredInputs: string[] = [],
     mixinCount = 0,
     paymentId = "",
-  ): Promise<PendingTransaction | null> {
-    const pendingTxPtr = await fns.Wallet_createTransactionMultDest?.(
+  ): Promise<PendingTransaction> {
+    const pendingTxPtr = await fns.Wallet_createTransactionMultDest(
       this.#ptr,
       CString(destinationAddresses.join(SEPARATOR)),
       C_SEPARATOR,
@@ -305,8 +301,6 @@ export class Wallet {
       CString(preferredInputs.join(SEPARATOR)),
       C_SEPARATOR,
     );
-
-    if (!pendingTxPtr) return null;
     return PendingTransaction.new(pendingTxPtr as PendingTransactionPtr);
   }
 

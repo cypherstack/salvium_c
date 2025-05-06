@@ -1,7 +1,16 @@
-import { CoinsInfo, Wallet, WalletManager } from "../impls/monero.ts/mod.ts";
+import {
+  CoinsInfo,
+  type Dylib,
+  loadMoneroDylib,
+  loadWowneroDylib,
+  moneroSymbols,
+  Wallet,
+  WalletManager,
+  wowneroSymbols,
+} from "../impls/monero.ts/mod.ts";
 
 import { assert, assertEquals } from "jsr:@std/assert";
-import { $, loadDylib, prepareCli, prepareMoneroC } from "./utils.ts";
+import { $, downloadCli, getMoneroC } from "./utils.ts";
 
 const coin = Deno.env.get("COIN");
 if (coin !== "monero" && coin !== "wownero") {
@@ -21,7 +30,7 @@ async function syncBlockchain(wallet: Wallet): Promise<bigint> {
         clearTimeout(timeout);
         resolve(blockChainHeight);
       } else {
-        timeout = setTimeout(poll, 500);
+        setTimeout(poll, 500);
       }
     };
 
@@ -44,7 +53,7 @@ const DESTINATION_ADDRESS = coin === "monero" ? MONERO_DESTINATION_ADDRESS : WOW
 
 const BILLION = 10n ** 9n;
 
-await prepareMoneroC(coin, "next");
+await getMoneroC(coin, "next");
 
 interface WalletInfo {
   name: string;
@@ -65,7 +74,14 @@ async function clearWallets() {
   await Deno.mkdir("tests/wallets/");
 }
 
-loadDylib(coin, "next");
+let dylib: Dylib;
+if (coin === "monero") {
+  dylib = Deno.dlopen(`tests/libs/next/monero_libwallet2_api_c.so`, moneroSymbols);
+  loadMoneroDylib(dylib);
+} else {
+  dylib = Deno.dlopen(`tests/libs/next/wownero_libwallet2_api_c.so`, wowneroSymbols);
+  loadWowneroDylib(dylib);
+}
 
 Deno.test("0001-polyseed.patch", async (t) => {
   const WALLETS: Record<"monero" | "wownero", WalletInfo[]> = {
@@ -238,12 +254,11 @@ Deno.test("0001-polyseed.patch", async (t) => {
   }
 });
 
-Deno.test("0002-wallet-background-sync-with-just-the-view-key.patch (close)", async () => {
+Deno.test("0002-wallet-background-sync-with-just-the-view-key.patch", async () => {
   await clearWallets();
 
   const walletManager = await WalletManager.new();
   const wallet = await walletManager.createWallet("tests/wallets/squirrel", "belka");
-  await wallet.setRefreshFromBlockHeight(3310000n);
   await wallet.init({
     address: NODE_URL,
   });
@@ -288,51 +303,6 @@ Deno.test("0002-wallet-background-sync-with-just-the-view-key.patch (close)", as
   );
 
   await reopenedWallet.close(true);
-});
-
-Deno.test("0002-wallet-background-sync-with-just-the-view-key.patch (stopBackgroundSync)", async () => {
-  await clearWallets();
-
-  const walletManager = await WalletManager.new();
-  const wallet = await walletManager.createWallet("tests/wallets/squirrel", "belka");
-  await wallet.setRefreshFromBlockHeight(3310000n);
-  await wallet.init({
-    address: NODE_URL,
-  });
-
-
-  const walletInfo = {
-    address: await wallet.address(),
-    publicSpendKey: await wallet.publicSpendKey(),
-    secretSpendKey: await wallet.secretSpendKey(),
-    publicViewKey: await wallet.publicViewKey(),
-    secretViewKey: await wallet.secretViewKey(),
-  };
-
-  await wallet.setupBackgroundSync(2, "belka", "background-belka");
-  await wallet.startBackgroundSync();
-
-
-  await wallet.init({ address: NODE_URL });
-  await wallet.refreshAsync();
-
-  const blockChainHeight = await syncBlockchain(wallet);
-
-  await wallet.stopBackgroundSync("belka");
-
-  assertEquals(await wallet.blockChainHeight(), blockChainHeight);
-  assertEquals(
-    walletInfo,
-    {
-      address: await wallet.address(),
-      publicSpendKey: await wallet.publicSpendKey(),
-      secretSpendKey: await wallet.secretSpendKey(),
-      publicViewKey: await wallet.publicViewKey(),
-      secretViewKey: await wallet.secretViewKey(),
-    },
-  );
-
-  await wallet.close(true);
 });
 
 Deno.test("0004-coin-control.patch", {
@@ -489,7 +459,7 @@ Deno.test("0004-coin-control.patch", {
 
       assertEquals(await transaction.status(), 1);
       assertEquals(
-        (await transaction.errorString())?.split("\n")[0],
+        await transaction.errorString(),
         "not enough money to transfer, overall balance only 0.002000000000, sent amount 0.002000000000",
       );
     });
@@ -517,7 +487,7 @@ Deno.test("0004-coin-control.patch", {
 
 Deno.test("0009-Add-recoverDeterministicWalletFromSpendKey.patch", async () => {
   await Promise.all([
-    prepareCli(coin),
+    downloadCli(coin),
     clearWallets(),
   ]);
 
@@ -528,7 +498,7 @@ Deno.test("0009-Add-recoverDeterministicWalletFromSpendKey.patch", async () => {
 
   await Deno.remove("./tests/wallets/stoat");
 
-  const cliPath = `./tests/dependencies/${coin}-cli/${coin}-wallet-cli`;
+  const cliPath = `./tests/${coin}-cli/${coin}-wallet-cli`;
   const moneroCliSeed = (await $.raw`${cliPath} --wallet-file ./tests/wallets/stoat --password gornostay --command seed`
     .stdinText(`gornostay\n`)
     .lines()).slice(-3).join(" ");

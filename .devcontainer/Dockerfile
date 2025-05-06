@@ -34,5 +34,3 @@ USER ubuntu
 RUN git config --global --add safe.directory '*'
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.2.0/zsh-in-docker.sh)" \
     -t robbyrussell 
-
-ENV SUDO=sudo

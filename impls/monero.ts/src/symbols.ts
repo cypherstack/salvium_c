@@ -1252,6 +1252,21 @@ export const moneroSymbols = {
       wallet_ptr: "pointer",
     ],
   },
+  MONERO_Wallet_daemonBlockChainHeight_cached: {
+    nonblocking: true,
+    result: "u64",
+    parameters: ["pointer"] as [
+      wallet_ptr: "pointer",
+    ],
+  },
+  MONERO_Wallet_daemonBlockChainHeight_runThread: {
+    nonblocking: true,
+    result: "void",
+    parameters: ["pointer", "i32"] as [
+      wallet_ptr: "pointer",
+      seconds: "i32",
+    ],
+  },
   MONERO_Wallet_daemonBlockChainTargetHeight: {
     nonblocking: true,
     result: "u64",
@@ -1548,7 +1563,6 @@ export const moneroSymbols = {
     ],
   },
   MONERO_Wallet_createTransactionMultDest: {
-    optional: true,
     nonblocking: true,
     result: "pointer",
     parameters: [
@@ -1957,7 +1971,6 @@ export const moneroSymbols = {
     ],
   },
   MONERO_Wallet_reconnectDevice: {
-    optional: true,
     nonblocking: true,
     result: "bool",
     parameters: ["pointer"] as [

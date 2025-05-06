@@ -36,18 +36,10 @@ export const moneroTsDylibNames = (coin: Coin) => ({
   windows_x86_64: `${coin}_libwallet2_api_c.dll`,
 } as Partial<Record<Target, string>>);
 
-export function loadDylib(coin: Coin, version: MoneroCVersion) {
-  const dylibName = moneroTsDylibNames(coin)[target]!;
-
-  if (coin === "monero") {
-    const dylib = Deno.dlopen(`tests/dependencies/libs/${version}/${dylibName}`, moneroSymbols);
-    loadMoneroDylib(dylib);
-    return dylib;
-  } else {
-    const dylib = Deno.dlopen(`tests/dependencies/libs/${version}/${dylibName}`, wowneroSymbols);
-    loadWowneroDylib(dylib);
-    return dylib;
-  }
+  await $`wget -q -o /dev/null ${MONERO_WALLET_CLI_URL}`;
+  await $
+    .raw`tar -xf ${MONERO_CLI_FILE_NAME}.tar.bz2 --one-top-level=monero-cli --strip-components=1 -C tests`;
+  await $.raw`rm ${MONERO_CLI_FILE_NAME}.tar.bz2`;
 }
 
 async function exists(path: string): Promise<boolean> {
@@ -62,24 +54,10 @@ async function exists(path: string): Promise<boolean> {
   }
 }
 
-export async function extract(path: string, out: string) {
-  const outDir = out.endsWith("/") ? out : dirname(out);
-  await Deno.mkdir(outDir, { recursive: true });
-
-  if (path.endsWith(".tar.bz2")) {
-    let args = `-C ${dirname(out)}`;
-    if (outDir === out) {
-      args = `-C ${out} --strip-components=1`;
-    }
-    await $.raw`tar -xf ${path} ${args}`;
-  } else if (path.endsWith(".zip")) {
-    await $.raw`unzip ${path} -nu -d ${outDir}`;
-  } else if (path.endsWith(".xz")) {
-    await $.raw`xz -kd ${path}`;
-    await Deno.rename(path.slice(0, -3), out);
-  } else {
-    throw new Error("Unsupported archive file for:" + path);
-  }
+  await $`wget -q -o /dev/null ${WOWNERO_WALLET_CLI_URL}`;
+  await $
+    .raw`tar -xf ${WOWNERO_CLI_FILE_NAME}.tar.bz2 --one-top-level=wownero-cli --strip-components=1 -C tests`;
+  await $.raw`rm ${WOWNERO_CLI_FILE_NAME}.tar.bz2`;
 }
 
 export async function prepareMoneroCli() {

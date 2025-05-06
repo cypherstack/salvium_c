@@ -1,4 +1,6 @@
 release/
 build/
-tests/dependencies
+tests/monero-cli
+tests/wownero-cli
+tests/libs
 tests/wallets

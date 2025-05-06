@@ -1,13 +1,24 @@
 import { assertEquals } from "jsr:@std/assert";
 
-import { WalletManager } from "../impls/monero.ts/mod.ts";
-import { loadDylib } from "./utils.ts";
+import {
+  loadMoneroDylib,
+  loadWowneroDylib,
+  moneroSymbols,
+  WalletManager,
+  wowneroSymbols,
+} from "../impls/monero.ts/mod.ts";
 
 const coin = Deno.args[0] as "monero" | "wownero";
 const version = Deno.args[1];
 const walletInfo = JSON.parse(Deno.args[2]);
 
-loadDylib(coin, version);
+if (coin === "monero") {
+  const dylib = Deno.dlopen(`tests/libs/${version}/monero_libwallet2_api_c.so`, moneroSymbols);
+  loadMoneroDylib(dylib);
+} else {
+  const dylib = Deno.dlopen(`tests/libs/${version}/wownero_libwallet2_api_c.so`, wowneroSymbols);
+  loadWowneroDylib(dylib);
+}
 
 const walletManager = await WalletManager.new();
 const wallet = await walletManager.openWallet(walletInfo.path, walletInfo.password);

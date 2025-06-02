@@ -59,10 +59,10 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 5c0f31cb8..f0630ef9b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -371,6 +371,8 @@ if(NOT MANUAL_SUBMODULES)
-     check_submodule(external/trezor-common)
+@@ -372,6 +372,8 @@ if(NOT MANUAL_SUBMODULES)
      check_submodule(external/randomx)
      check_submodule(external/supercop)
+     check_submodule(external/mx25519)
 +    check_submodule(external/polyseed)
 +    check_submodule(external/utf8proc)
    endif()
@@ -72,8 +72,8 @@ index 5c0f31cb8..f0630ef9b 100644
    set(BSDI TRUE)
  endif()
  
--include_directories(external/rapidjson/include external/easylogging++ src contrib/epee/include external external/supercop/include)
-+include_directories(external/rapidjson/include external/easylogging++ src contrib/epee/include external external/supercop/include external/polyseed/include external/utf8proc)
+-include_directories(external/rapidjson/include external/easylogging++ src contrib/epee/include external external/supercop/include external/mx25519/include)
++include_directories(external/rapidjson/include external/easylogging++ src contrib/epee/include external external/supercop/include external/mx25519/include external/polyseed/include external/utf8proc)
  
  if(APPLE)
    cmake_policy(SET CMP0042 NEW)
@@ -157,8 +157,8 @@ index 3335d3c21..06b708cf0 100644
  add_subdirectory(mnemonics)
 +add_subdirectory(polyseed)
  add_subdirectory(rpc)
+ add_subdirectory(seraphis_crypto)
  if(NOT IOS)
-   add_subdirectory(serialization)
 diff --git a/src/cryptonote_basic/CMakeLists.txt b/src/cryptonote_basic/CMakeLists.txt
 index 1414be1b2..414936a05 100644
 --- a/src/cryptonote_basic/CMakeLists.txt
@@ -1018,9 +1018,9 @@ index 765cefb32..806de969a 100644
  #include "device_trezor/device_trezor.hpp"
  #include "net/socks_connect.h"
 +#include "polyseed/include/polyseed.h"
+ #include "carrot_impl/format_utils.h"
+ #include "tx_builder.h"
  
- extern "C"
- {
 @@ -1273,7 +1274,8 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended, std
    m_send_change_back_to_subaddress(false),
    m_pool_info_query_time(0),
@@ -1051,7 +1051,7 @@ index 765cefb32..806de969a 100644
 +//----------------------------------------------------------------------------------------------------
  bool wallet2::get_multisig_seed(epee::wipeable_string& seed, const epee::wipeable_string &passphrase) const
  {
-   bool ready;
+   const multisig::multisig_account_status ms_status{get_multisig_status()};
 @@ -5313,6 +5329,9 @@ boost::optional<wallet2::keys_file_data> wallet2::get_keys_file_data(const crypt
    value2.SetInt(m_enable_multisig ? 1 : 0);
    json.AddMember("enable_multisig", value2, json.GetAllocator());

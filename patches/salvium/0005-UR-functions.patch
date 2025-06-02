@@ -99,8 +99,8 @@ index 6095f99d5..b163212b7 100644
      rpc_base
 +    bc-ur
      multisig
+     carrot_impl
      common
-     cryptonote_core
 diff --git a/src/wallet/api/pending_transaction.cpp b/src/wallet/api/pending_transaction.cpp
 index 70a702796..9c3c26ee5 100644
 --- a/src/wallet/api/pending_transaction.cpp
@@ -815,7 +815,7 @@ index b827b826f..765cefb32 100644
    if (unused_dust_indices_per_subaddr.empty())
      unused_dust_indices_per_subaddr.push_back({});
 @@ -13742,33 +13775,40 @@ crypto::public_key wallet2::get_tx_pub_key_from_received_outs(const tools::walle
- 
+ //----------------------------------------------------------------------------------------------------
  bool wallet2::export_key_images(const std::string &filename, bool all) const
  {
 -  PERF_TIMER(export_key_images);

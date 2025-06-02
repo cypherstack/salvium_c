@@ -974,22 +974,14 @@ index 806de969a..8720e18b1 100644
  size_t wallet2::get_transfer_details(const crypto::key_image &ki) const
  {
    for (size_t idx = 0; idx < m_transfers.size(); ++idx)
-@@ -2879,6 +2900,7 @@ void wallet2::process_new_transaction(const crypto::hash &txid, const cryptonote
-           uint64_t amount = tx.vout[o].amount ? tx.vout[o].amount : tx_scan_info[o].amount;
-           if (!pool)
-           {
-+            boost::unique_lock<boost::shared_mutex> lock(m_transfers_mutex);
-             std::string asset_type = "";
-             THROW_WALLET_EXCEPTION_IF(!cryptonote::get_output_asset_type(tx.vout[o], asset_type), error::wallet_internal_error, "failed to get output_asset_type");
-             m_transfers.push_back(transfer_details{});
-@@ -3037,6 +3059,7 @@ void wallet2::process_new_transaction(const crypto::hash &txid, const cryptonote
-           uint64_t extra_amount = amount - burnt;
-           if (!pool)
-           {
-+            boost::unique_lock<boost::shared_mutex> lock(m_transfers_mutex);
-             transfer_details &td = m_transfers[kit->second];
-             td.m_block_height = height;
-             td.m_internal_output_index = o;
+@@ -3037,6 +3059,7 @@ void wallet2::process_new_scanned_transaction(const crypto::hash &txid, const cryp
+         expand_subaddresses(subaddr_index_cn);
+ 
+     // update m_transfers view-incoming scan info, and default values
++    boost::unique_lock<boost::shared_mutex> lock(m_transfers_mutex);
+     transfer_details& td = tools::add_element(m_transfers);
+     td.m_block_height = height;
+     td.m_internal_output_index = local_output_index;
 @@ -11031,7 +11054,7 @@ void wallet2::transfer_selected_rct(std::vector<cryptonote::tx_destination_entry
    LOG_PRINT_L2("transfer_selected_rct done");
  }
@@ -1064,8 +1056,8 @@ index 806de969a..8720e18b1 100644
 -std::vector<wallet2::pending_tx> wallet2::create_transactions_all(uint64_t below, cryptonote::transaction_type tx_type, const std::string &asset_type, const cryptonote::account_public_address &address, bool is_subaddress, const size_t outputs, const size_t fake_outs_count, const uint64_t unlock_time, uint32_t priority, const std::vector<uint8_t>& extra, uint32_t subaddr_account, std::set<uint32_t> subaddr_indices)
 +std::vector<wallet2::pending_tx> wallet2::create_transactions_all(uint64_t below, cryptonote::transaction_type tx_type, const std::string &asset_type, const cryptonote::account_public_address &address, bool is_subaddress, const size_t outputs, const size_t fake_outs_count, const uint64_t unlock_time, uint32_t priority, const std::vector<uint8_t>& extra, uint32_t subaddr_account, std::set<uint32_t> subaddr_indices, const std::vector<crypto::key_image>& preferred_input_list)
  {
-   std::vector<size_t> unused_transfers_indices;
-   std::vector<size_t> unused_dust_indices;
+   const bool do_carrot_tx_construction = use_fork_rules(HF_VERSION_CARROT);
+   if (do_carrot_tx_construction)
 @@ -12056,7 +12091,10 @@ std::vector<wallet2::pending_tx> wallet2::create_transactions_all(uint64_t below
    for (const auto& i: m_transfers_indices[asset_type])
    {
@@ -1126,8 +1118,8 @@ index a619bdd15..4f324c238 100644
 -    std::vector<size_t> pick_preferred_rct_inputs(uint64_t needed_money, uint32_t subaddr_account, const std::set<uint32_t> &subaddr_indices, const std::string& asset_type);
 +    std::vector<size_t> pick_preferred_rct_inputs(uint64_t needed_money, uint32_t subaddr_account, const std::set<uint32_t> &subaddr_indices, const std::string& asset_type, const std::vector<crypto::key_image>& preferred_input_list);
      void set_spent(size_t idx, uint64_t height);
+     void set_spent(const crypto::key_image &ki, const uint64_t height);
      void set_unspent(size_t idx);
-     bool is_spent(const transfer_details &td, bool strict = true) const;
 -- 
 2.48.1
 

@@ -175,7 +175,7 @@ diff --git a/src/cryptonote_basic/account.cpp b/src/cryptonote_basic/account.cpp
 index 4e87d4477..2d556f285 100644
 --- a/src/cryptonote_basic/account.cpp
 +++ b/src/cryptonote_basic/account.cpp
-@@ -87,12 +87,16 @@ DISABLE_VS_WARNINGS(4244 4345)
+@@ -89,12 +89,16 @@ DISABLE_VS_WARNINGS(4244 4345)
    void account_keys::xor_with_key_stream(const crypto::chacha_key &key)
    {
      // encrypt a large enough byte stream with chacha20
@@ -193,16 +193,16 @@ index 4e87d4477..2d556f285 100644
      for (crypto::secret_key &k: m_multisig_keys)
      {
        for (size_t i = 0; i < sizeof(crypto::secret_key); ++i)
-@@ -150,6 +154,8 @@ DISABLE_VS_WARNINGS(4244 4345)
-   {
-     m_keys.m_spend_secret_key = crypto::secret_key();
+@@ -153,6 +158,8 @@ DISABLE_VS_WARNINGS(4244 4345)
+     m_keys.s_master = m_keys.m_spend_secret_key;
+     m_keys.k_prove_spend = m_keys.m_spend_secret_key;
      m_keys.m_multisig_keys.clear();
 +    m_keys.m_polyseed = crypto::secret_key();
 +    m_keys.m_passphrase.wipe();
    }
    //-----------------------------------------------------------------
    void account_base::set_spend_key(const crypto::secret_key& spend_secret_key)
-@@ -255,6 +261,21 @@ DISABLE_VS_WARNINGS(4244 4345)
+@@ -260,6 +267,21 @@ DISABLE_VS_WARNINGS(4244 4345)
      create_from_keys(address, fake, viewkey);
    }
    //-----------------------------------------------------------------
@@ -1020,7 +1020,7 @@ index 765cefb32..806de969a 100644
 +#include "polyseed/include/polyseed.h"
  #include "carrot_impl/format_utils.h"
  #include "tx_builder.h"
- 
+ #include "scanning_tools.h"
 @@ -1273,7 +1274,8 @@ wallet2::wallet2(network_type nettype, uint64_t kdf_rounds, bool unattended, std
    m_send_change_back_to_subaddress(false),
    m_pool_info_query_time(0),

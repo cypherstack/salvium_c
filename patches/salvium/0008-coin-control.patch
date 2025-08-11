@@ -979,7 +979,7 @@ index 806de969a..8720e18b1 100644
  
      // update m_transfers view-incoming scan info, and default values
 +    boost::unique_lock<boost::shared_mutex> lock(m_transfers_mutex);
-     transfer_details& td = tools::add_element(m_transfers);
+     transfer_details& td = m_transfers.emplace_back();
      td.m_block_height = height;
      td.m_internal_output_index = local_output_index;
 @@ -11031,7 +11054,7 @@ void wallet2::transfer_selected_rct(std::vector<cryptonote::tx_destination_entry

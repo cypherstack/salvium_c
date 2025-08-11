@@ -87,7 +87,7 @@ new file mode 100644
 index 000000000..ef12141cf
 --- /dev/null
 +++ b/src/wallet/api/coins.cpp
-@@ -0,0 +1,186 @@
+@@ -0,0 +1,194 @@
 +#include "coins.h"
 +#include "coins_info.h"
 +#include "wallet.h"
@@ -153,6 +153,12 @@ index 000000000..ef12141cf
 +    {
 +        const tools::wallet2::transfer_details &td = m_wallet->m_wallet->get_transfer_details(i);
 +
++        // Make a subaddress_index_extended from td.m_subaddr_index
++        carrot::subaddress_index_extended csub{
++          {td.m_subaddr_index.major, td.m_subaddr_index.minor},
++          td.is_carrot() ? carrot::AddressDeriveType::Carrot : carrot::AddressDeriveType::PreCarrot,
++          false};
++        
 +        auto ci = new CoinsInfoImpl();
 +        ci->m_blockHeight = td.m_block_height;
 +        ci->m_hash = string_tools::pod_to_hex(td.m_txid);
@@ -167,7 +173,7 @@ index 000000000..ef12141cf
 +        ci->m_pkIndex = td.m_pk_index;
 +        ci->m_subaddrIndex = td.m_subaddr_index.minor;
 +        ci->m_subaddrAccount = td.m_subaddr_index.major;
-+        ci->m_address = m_wallet->m_wallet->get_subaddress_as_str(td.m_subaddr_index); // todo: this is expensive, cache maybe?
++        ci->m_address = m_wallet->m_wallet->get_subaddress_as_str(csub); // todo: this is expensive, cache maybe?
 +        ci->m_addressLabel = m_wallet->m_wallet->get_subaddress_label(td.m_subaddr_index);
 +        ci->m_keyImage = string_tools::pod_to_hex(td.m_key_image);
 +        ci->m_unlockTime = td.m_tx.unlock_time;
@@ -175,6 +181,8 @@ index 000000000..ef12141cf
 +        ci->m_pubKey = string_tools::pod_to_hex(td.get_public_key());
 +        ci->m_coinbase = td.m_tx.vin.size() == 1 && td.m_tx.vin[0].type() == typeid(cryptonote::txin_gen);
 +        ci->m_description = m_wallet->m_wallet->get_tx_note(td.m_txid);
++        ci->m_asset = td.asset_type;
++        ci->m_type = td.m_tx.type;
 +
 +        m_rows.push_back(ci);
 +    }
@@ -325,7 +333,7 @@ new file mode 100644
 index 000000000..5f2c4e1e4
 --- /dev/null
 +++ b/src/wallet/api/coins_info.cpp
-@@ -0,0 +1,122 @@
+@@ -0,0 +1,131 @@
 +#include "coins_info.h"
 +
 +using namespace std;
@@ -445,6 +453,15 @@ index 000000000..5f2c4e1e4
 +string CoinsInfoImpl::description() const {
 +    return m_description;
 +}
++
++string CoinsInfoImpl::asset() const {
++    return m_asset;
++}
++
++uint8_t CoinsInfoImpl::type() const {
++    return m_type;
++}
++
 +} // namespace
 +
 +namespace Bitmonero = Monero;
@@ -453,7 +470,7 @@ new file mode 100644
 index 000000000..c43e45abd
 --- /dev/null
 +++ b/src/wallet/api/coins_info.h
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,75 @@
 +#ifndef FEATHER_COINS_INFO_H
 +#define FEATHER_COINS_INFO_H
 +
@@ -492,6 +509,8 @@ index 000000000..c43e45abd
 +    virtual std::string pubKey() const override;
 +    virtual bool coinbase() const override;
 +    virtual std::string description() const override;
++    virtual std::string asset() const override;
++    virtual uint8_t type() const override;
 +
 +private:
 +    uint64_t    m_blockHeight;
@@ -515,7 +534,9 @@ index 000000000..c43e45abd
 +    std::string m_pubKey;
 +    bool        m_coinbase;
 +    std::string m_description;
-+
++    std::string m_asset;
++    uint8_t     m_type;
++  
 +    friend class CoinsImpl;
 +
 +};
@@ -849,7 +870,7 @@ diff --git a/src/wallet/api/wallet2_api.h b/src/wallet/api/wallet2_api.h
 index be1c3704e..013b5bcba 100644
 --- a/src/wallet/api/wallet2_api.h
 +++ b/src/wallet/api/wallet2_api.h
-@@ -263,6 +263,51 @@ struct AddressBook
+@@ -263,6 +263,53 @@ struct AddressBook
      virtual int lookupPaymentID(const std::string &payment_id) const = 0;
  };
  
@@ -881,6 +902,8 @@ index be1c3704e..013b5bcba 100644
 +    virtual std::string pubKey() const = 0;
 +    virtual bool coinbase() const = 0;
 +    virtual std::string description() const = 0;
++    virtual std::string asset() const = 0;
++    virtual uint8_t type() const = 0;
 +};
 +
 +struct Coins

@@ -719,6 +719,11 @@ extern ADDAPI void* SALVIUM_Wallet_createTransaction(void* wallet_ptr, const cha
                                                     int pendingTransactionPriority,
                                                     uint32_t subaddr_account,
                                                     const char* preferredInputs, const char* separator);
+extern ADDAPI void* SALVIUM_Wallet_createStakeTransaction(void* wallet_ptr, const char* dst_addr, const char* payment_id,
+                                                          uint64_t amount, uint32_t mixin_count,
+                                                          int pendingTransactionPriority,
+                                                          uint32_t subaddr_account,
+                                                          const char* preferredInputs, const char* separator);
 //     virtual PendingTransaction * createSweepUnmixableTransaction() = 0;
 //     virtual UnsignedTransaction * loadUnsignedTx(const std::string &unsigned_filename) = 0;
 extern ADDAPI void* SALVIUM_Wallet_loadUnsignedTx(void* wallet_ptr, const char* unsigned_filename);

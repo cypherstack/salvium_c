@@ -1738,9 +1738,23 @@ void* SALVIUM_Wallet_createTransactionMultDest(void* wallet_ptr, const char* dst
                                              "SAL1", false /* is_return */,
                                              PendingTransaction_Priority_fromInt(pendingTransactionPriority),
                                              subaddr_account,
-                                             subaddr_indices,
-                                             preferred_inputs
+                                             subaddr_indices
                                              );
+    DEBUG_END()
+}
+
+void* SALVIUM_Wallet_createStakeTransaction(void* wallet_ptr, const char* dst_addr, const char* payment_id,
+                                            uint64_t amount, uint32_t mixin_count,
+                                            int pendingTransactionPriority,
+                                            uint32_t subaddr_account,
+                                            const char* preferredInputs, const char* separator) {
+    DEBUG_START()
+    Monero::Wallet *wallet = reinterpret_cast<Monero::Wallet*>(wallet_ptr);
+    std::set<uint32_t> subaddr_indices = {};
+    std::set<std::string> preferred_inputs = splitString(std::string(preferredInputs), std::string(separator));
+    return wallet->createStakeTransaction(amount, mixin_count,
+                                          PendingTransaction_Priority_fromInt(pendingTransactionPriority),
+                                          subaddr_account, subaddr_indices);
     DEBUG_END()
 }
 
@@ -1761,7 +1775,7 @@ void* SALVIUM_Wallet_createTransaction(void* wallet_ptr, const char* dst_addr, c
                                      optAmount, mixin_count,
                                      "SAL1", false /* is_return */,
                                      PendingTransaction_Priority_fromInt(pendingTransactionPriority),
-                                     subaddr_account, subaddr_indices, preferred_inputs);
+                                     subaddr_account, subaddr_indices);
     DEBUG_END()
 }
 

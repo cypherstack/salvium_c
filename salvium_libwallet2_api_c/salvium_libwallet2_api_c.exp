@@ -73,6 +73,7 @@ _SALVIUM_CoinsInfo_spent
 _SALVIUM_CoinsInfo_frozen
 _SALVIUM_CoinsInfo_spentHeight
 _SALVIUM_CoinsInfo_amount
+_SALVIUM_CoinsInfo_type
 _SALVIUM_CoinsInfo_rct
 _SALVIUM_CoinsInfo_keyImageKnown
 _SALVIUM_CoinsInfo_pkIndex
@@ -86,6 +87,7 @@ _SALVIUM_CoinsInfo_unlocked
 _SALVIUM_CoinsInfo_pubKey
 _SALVIUM_CoinsInfo_coinbase
 _SALVIUM_CoinsInfo_description
+_SALVIUM_CoinsInfo_asset
 _SALVIUM_Coins_count
 _SALVIUM_Coins_coin
 _SALVIUM_Coins_getAll_size

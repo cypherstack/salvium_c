@@ -750,6 +750,24 @@ const char* SALVIUM_CoinsInfo_description(void* coinsInfo_ptr) {
     return buffer;
     DEBUG_END()
 }
+//     virtual std::string asset() const = 0;
+const char* SALVIUM_CoinsInfo_asset(void* coinsInfo_ptr) {
+    DEBUG_START()
+    Monero::CoinsInfo *coinsInfo = reinterpret_cast<Monero::CoinsInfo*>(coinsInfo_ptr);
+    std::string str = coinsInfo->asset();
+    const std::string::size_type size = str.size();
+    char *buffer = new char[size + 1];   //we need extra char for NUL
+    memcpy(buffer, str.c_str(), size + 1);
+    return buffer;
+    DEBUG_END()
+}
+//     virtual uint8_t type() const = 0;
+uint8_t SALVIUM_CoinsInfo_type(void* coinsInfo_ptr) {
+    DEBUG_START()
+    Monero::CoinsInfo *coinsInfo = reinterpret_cast<Monero::CoinsInfo*>(coinsInfo_ptr);
+    return coinsInfo->type();
+    DEBUG_END()
+}
 
 
 // coins

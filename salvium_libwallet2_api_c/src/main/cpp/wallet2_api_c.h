@@ -311,6 +311,10 @@ extern ADDAPI const char* SALVIUM_CoinsInfo_pubKey(void* coinsInfo_ptr);
 extern ADDAPI bool SALVIUM_CoinsInfo_coinbase(void* coinsInfo_ptr);
 //     virtual std::string description() const = 0;
 extern ADDAPI const char* SALVIUM_CoinsInfo_description(void* coinsInfo_ptr);
+//     virtual std::string asset() const = 0;
+extern ADDAPI const char* SALVIUM_CoinsInfo_asset(void* coinsInfo_ptr);
+//     virtual uint8_t type() const = 0;
+extern ADDAPI uint8_t SALVIUM_CoinsInfo_type(void* coinsInfo_ptr);
 // };
 // struct Coins
 // {

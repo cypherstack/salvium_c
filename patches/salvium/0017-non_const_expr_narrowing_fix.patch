@@ -1,0 +1,38 @@
+Subject: [PATCH] non const expr narrowing fix
+From: julian <julian@cypherstack.com>
+---
+Index: src/wallet/wallet2.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/wallet/wallet2.cpp b/src/wallet/wallet2.cpp
+--- a/src/wallet/wallet2.cpp	(revision be9e85a820179a9c23f538167c4e1cff419dea42)
++++ b/src/wallet/wallet2.cpp	(date 1759177109461)
+@@ -3909,7 +3909,7 @@
+       const cryptonote::transaction& tx = parsed_blocks[i].block.miner_tx;
+       const size_t n_vouts = (m_refresh_type == RefreshType::RefreshOptimizeCoinbase && tx.version < 2) ? 1 : tx.vout.size();
+       if (parsed_blocks[i].block.major_version >= hf_version_view_tags)
+-        geniods.push_back(geniod_params{ tx, n_vouts, txidx, start_height+i });
++        geniods.push_back(geniod_params{ tx, n_vouts, txidx, static_cast<size_t>(start_height+i) });
+       else
+         tpool.submit(&waiter, [&, n_vouts, txidx](){ geniod(tx, n_vouts, txidx, start_height+i); }, true);
+     }
+@@ -3918,7 +3918,7 @@
+     const cryptonote::transaction& tx = parsed_blocks[i].block.protocol_tx;
+     const size_t n_vouts = tx.vout.size();
+     if (parsed_blocks[i].block.major_version >= hf_version_view_tags)
+-      geniods.push_back(geniod_params{ tx, n_vouts, txidx, start_height+i });
++      geniods.push_back(geniod_params{ tx, n_vouts, txidx, static_cast<size_t>(start_height+i) });
+     else
+       tpool.submit(&waiter, [&, n_vouts, txidx](){ geniod(tx, n_vouts, txidx, start_height+i); }, true);
+     ++txidx;
+@@ -3926,7 +3926,7 @@
+     {
+       THROW_WALLET_EXCEPTION_IF(txidx >= tx_cache_data.size(), error::wallet_internal_error, "txidx out of range");
+       if (parsed_blocks[i].block.major_version >= hf_version_view_tags)
+-        geniods.push_back(geniod_params{ parsed_blocks[i].txes[j], parsed_blocks[i].txes[j].vout.size(), txidx, start_height+i });
++        geniods.push_back(geniod_params{ parsed_blocks[i].txes[j], parsed_blocks[i].txes[j].vout.size(), txidx, static_cast<size_t>(start_height+i) });
+       else
+         tpool.submit(&waiter, [&, i, j, txidx](){ geniod(parsed_blocks[i].txes[j], parsed_blocks[i].txes[j].vout.size(), txidx, start_height+i); }, true);
+       ++txidx;

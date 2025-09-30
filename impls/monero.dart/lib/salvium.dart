@@ -3358,6 +3358,25 @@ void Wallet_setDeviceSendData(wallet ptr, Pointer<UnsignedChar> data, int len) {
   return ret;
 }
 
+@Deprecated("TODO")
+void Wallet_setLedgerCallback(Pointer<NativeFunction<Void Function(Pointer<UnsignedChar>, UnsignedInt)>> callback) {
+  debugStart?.call('SALVIUM_Wallet_setLedgerCallback');
+  lib ??= MoneroC(DynamicLibrary.open(libPath));
+  final ret = lib!.SALVIUM_Wallet_setLedgerCallback(callback);
+  debugEnd?.call('SALVIUM_Wallet_setLedgerCallback');
+  return ret;
+}
+
+String Wallet_serializeCacheToJson(wallet ptr) {
+  debugStart?.call('SALVIUM_Wallet_serializeCacheToJson');
+  lib ??= MoneroC(DynamicLibrary.open(libPath));
+  final ret = lib!.SALVIUM_Wallet_serializeCacheToJson(ptr);
+  final str = ret.cast<Utf8>().toDartString();
+  MONERO_free(ret.cast());
+  debugEnd?.call('SALVIUM_Wallet_serializeCacheToJson');
+  return str;
+}
+
 // WalletManager
 
 typedef WalletManager = Pointer<Void>;

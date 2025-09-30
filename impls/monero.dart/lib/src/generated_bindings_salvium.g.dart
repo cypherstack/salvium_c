@@ -4550,6 +4550,51 @@ class SalviumC {
           void Function(
               ffi.Pointer<ffi.Void>, ffi.Pointer<ffi.UnsignedChar>, int)>();
 
+  void MONERO_Wallet_setLedgerCallback(
+    ffi.Pointer<
+            ffi.NativeFunction<
+                ffi.Void Function(ffi.Pointer<ffi.UnsignedChar> command,
+                    ffi.UnsignedInt cmd_len)>>
+        sendToLedgerDevice,
+  ) {
+    return _MONERO_Wallet_setLedgerCallback(
+      sendToLedgerDevice,
+    );
+  }
+
+  late final _SALVIUM_Wallet_setLedgerCallbackPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<
+                      ffi.NativeFunction<
+                          ffi.Void Function(
+                              ffi.Pointer<ffi.UnsignedChar> command,
+                              ffi.UnsignedInt cmd_len)>>)>>(
+      'SALVIUM_Wallet_setLedgerCallback');
+  late final _SALVIUM_Wallet_setLedgerCallback =
+      _SALVIUM_Wallet_setLedgerCallbackPtr.asFunction<
+          void Function(
+              ffi.Pointer<
+                  ffi.NativeFunction<
+                      ffi.Void Function(ffi.Pointer<ffi.UnsignedChar> command,
+                          ffi.UnsignedInt cmd_len)>>)>();
+
+  ffi.Pointer<ffi.Char> SALVIUM_Wallet_serializeCacheToJson(
+    ffi.Pointer<ffi.Void> wallet_ptr,
+  ) {
+    return _SALVIUM_Wallet_serializeCacheToJson(
+      wallet_ptr,
+    );
+  }
+
+  late final _SALVIUM_Wallet_serializeCacheToJsonPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Void>)>>('SALVIUM_Wallet_serializeCacheToJson');
+  late final _SALVIUM_Wallet_serializeCacheToJson =
+      _SALVIUM_Wallet_serializeCacheToJsonPtr.asFunction<
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Void>)>();
+
   ffi.Pointer<ffi.Void> SALVIUM_WalletManager_createWallet(
     ffi.Pointer<ffi.Void> wm_ptr,
     ffi.Pointer<ffi.Char> path,

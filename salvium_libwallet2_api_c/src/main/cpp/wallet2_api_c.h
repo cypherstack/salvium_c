@@ -854,6 +854,8 @@ extern ADDAPI bool SALVIUM_Wallet_getWaitsForDeviceSend(void* wallet_ptr);
 extern ADDAPI bool SALVIUM_Wallet_getWaitsForDeviceReceive(void* wallet_ptr);
 extern ADDAPI void SALVIUM_Wallet_setDeviceReceivedData(void* wallet_ptr, unsigned char* data, size_t len);
 extern ADDAPI void SALVIUM_Wallet_setDeviceSendData(void* wallet_ptr, unsigned char* data, size_t len);
+extern ADDAPI void SALVIUM_Wallet_setLedgerCallback(void (*sendToLedgerDevice)(unsigned char *command, unsigned int cmd_len));
+extern ADDAPI const char* SALVIUM_Wallet_serializeCacheToJson(void* wallet_ptr);
 // };
 
 // struct WalletManager

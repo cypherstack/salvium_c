@@ -22,14 +22,14 @@ index b163212b7..196ad671f 100644
    message_transporter.cpp
    wallet_rpc_payments.cpp
 +  wallet_cache_to_json.cpp
+   tx_builder.cpp
  )
  
- monero_find_all_headers(wallet_private_headers "${CMAKE_CURRENT_SOURCE_DIR}")
 diff --git a/src/wallet/api/wallet.cpp b/src/wallet/api/wallet.cpp
 index 7d7d0f922..effb6e719 100644
 --- a/src/wallet/api/wallet.cpp
 +++ b/src/wallet/api/wallet.cpp
-@@ -3475,4 +3475,9 @@ void Wallet::setLedgerCallback(void (*sendToLedgerDevice)(unsigned char *command
+@@ -3475,6 +3475,11 @@ void Wallet::setLedgerCallback(void (*sendToLedgerDevice)(unsigned char *command
      #endif
  }
  
@@ -38,7 +38,9 @@ index 7d7d0f922..effb6e719 100644
 +    return std::string(m_wallet->serialize_cache_to_json());
 +}
 +
- } // namespace
+ YieldInfo * WalletImpl::getYieldInfo()
+ {
+   auto yi = new YieldInfoImpl(*this);
 diff --git a/src/wallet/api/wallet.h b/src/wallet/api/wallet.h
 index bfe81c590..98c03b9c1 100644
 --- a/src/wallet/api/wallet.h
@@ -56,16 +58,17 @@ diff --git a/src/wallet/api/wallet2_api.h b/src/wallet/api/wallet2_api.h
 index fcb8187d4..3d11929f9 100644
 --- a/src/wallet/api/wallet2_api.h
 +++ b/src/wallet/api/wallet2_api.h
-@@ -1217,6 +1217,9 @@ struct Wallet
+@@ -1217,7 +1217,10 @@ struct Wallet
      static void setDeviceReceivedData(unsigned char* data, size_t len);
      static void setDeviceSendData(unsigned char* data, size_t len);
      static void setLedgerCallback(void (*sendToLedgerDevice)(unsigned char *command, unsigned int cmd_len));
 +
 +    //! serialize wallet cache to JSON
 +    virtual std::string serializeCacheToJson() const = 0;
- };
- 
- /**
+     
+     //! get yield information
+     virtual YieldInfo * getYieldInfo() = 0;
+ }; 
 diff --git a/src/wallet/wallet2.h b/src/wallet/wallet2.h
 index 4f324c238..bc4abc672 100644
 --- a/src/wallet/wallet2.h

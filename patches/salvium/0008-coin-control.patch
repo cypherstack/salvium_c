@@ -333,7 +333,7 @@ new file mode 100644
 index 000000000..5f2c4e1e4
 --- /dev/null
 +++ b/src/wallet/api/coins_info.cpp
-@@ -0,0 +1,131 @@
+@@ -0,0 +1,132 @@
 +#include "coins_info.h"
 +
 +using namespace std;
@@ -357,6 +357,7 @@ index 000000000..5f2c4e1e4
 +        , m_subaddrIndex(0)
 +        , m_unlockTime(0)
 +        , m_unlocked(false)
++        , m_type(0)
 +{
 +
 +}

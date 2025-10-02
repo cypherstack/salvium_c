@@ -73,8 +73,8 @@ diff --git a/src/wallet/wallet2.h b/src/wallet/wallet2.h
 index 4f324c238..bc4abc672 100644
 --- a/src/wallet/wallet2.h
 +++ b/src/wallet/wallet2.h
-@@ -1429,6 +1429,12 @@ private:
-       FIELD(m_background_sync_data)
+@@ -1544,6 +1544,12 @@ private:
+       FIELD(m_return_output_info)
      END_SERIALIZE()
  
 +    /*!

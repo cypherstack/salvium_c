@@ -1,6 +1,6 @@
 #ifndef MONEROC_CHECKSUMS
 #define MONEROC_CHECKSUMS
-const char * SALVIUM_wallet2_api_c_h_sha256 = "d6a6d49046e67051e6ee8409d025587a8fcfe16515346139c0723ec9031ba9bf";
-const char * SALVIUM_wallet2_api_c_cpp_sha256 = "a426ea10242ec51646cd8f27c1baecac1796035f518b66163ed3ed00255f6247-1f49c178ee19f55088c85be40215a12183b4ef02";
-const char * SALVIUM_wallet2_api_c_exp_sha256 = "e2d945d4c9e635008d23cbe936be5bb3e8f03addf54945827aed951e911f9784";
+const char * SALVIUM_wallet2_api_c_h_sha256 = "bf14955d181bc1ed7d033eadc02c78d9943845e940cbc687d7cfa8b62d7348db";
+const char * SALVIUM_wallet2_api_c_cpp_sha256 = "0cf05a712e9206d29045ec948378534b7f01ba2169078f3f6cd066f0fcdd4b6e-845d46d7b3c0a856299ff9f169ce7d49093d06b8";
+const char * SALVIUM_wallet2_api_c_exp_sha256 = "0ef2b0e950f90ae3a2aaf41548364483dfa692d189e587a3964453639b05a374";
 #endif

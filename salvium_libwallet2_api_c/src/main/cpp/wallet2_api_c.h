@@ -194,6 +194,7 @@ extern ADDAPI const char* SALVIUM_TransactionInfo_paymentId(void* txInfo_ptr);
 extern ADDAPI int SALVIUM_TransactionInfo_transfers_count(void* txInfo_ptr);
 extern ADDAPI uint64_t SALVIUM_TransactionInfo_transfers_amount(void* txInfo_ptr, int index);
 extern ADDAPI const char* SALVIUM_TransactionInfo_transfers_address(void* txInfo_ptr, int address);
+extern ADDAPI const char* SALVIUM_TransactionInfo_transfers_asset(void* txInfo_ptr, int asset);
 // };
 // struct TransactionHistory
 // {
@@ -384,14 +385,18 @@ extern ADDAPI void SALVIUM_Subaddress_refresh(void* subaddress_ptr, uint32_t acc
 //         m_address(_address),
 //         m_label(_label),
 //         m_balance(_balance),
-//         m_unlockedBalance(_unlockedBalance) {}
+//         m_unlockedBalance(_unlockedBalance),
+//        m_balance_sal1(_balance_sal1),
+//        m_unlockedBalance_sal1(_unlockedBalance_sal1) {}
 
 // private:
 //     std::size_t m_rowId;
 //     std::string m_address;
 //     std::string m_label;
 //     std::string m_balance;
+//     std::string m_balance_sal1;
 //     std::string m_unlockedBalance;
+//     std::string m_unlockedBalance_sal1;
 // public:
 //     std::string extra;
 extern ADDAPI const char* SALVIUM_SubaddressAccountRow_extra(void* subaddressAccountRow_ptr);
@@ -400,9 +405,9 @@ extern ADDAPI const char* SALVIUM_SubaddressAccountRow_getAddress(void* subaddre
 //     std::string getLabel() const {return m_label;}
 extern ADDAPI const char* SALVIUM_SubaddressAccountRow_getLabel(void* subaddressAccountRow_ptr);
 //     std::string getBalance() const {return m_balance;}
-extern ADDAPI const char* SALVIUM_SubaddressAccountRow_getBalance(void* subaddressAccountRow_ptr);
+  extern ADDAPI const char* SALVIUM_SubaddressAccountRow_getBalance(void* subaddressAccountRow_ptr, const char* asset);
 //     std::string getUnlockedBalance() const {return m_unlockedBalance;}
-extern ADDAPI const char* SALVIUM_SubaddressAccountRow_getUnlockedBalance(void* subaddressAccountRow_ptr);
+extern ADDAPI const char* SALVIUM_SubaddressAccountRow_getUnlockedBalance(void* subaddressAccountRow_ptr, const char* asset);
 //     std::size_t getRowId() const {return m_rowId;}
 extern ADDAPI size_t SALVIUM_SubaddressAccountRow_getRowId(void* subaddressAccountRow_ptr);
 // };

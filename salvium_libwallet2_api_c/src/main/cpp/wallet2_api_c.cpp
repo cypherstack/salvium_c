@@ -967,7 +967,7 @@ const char* SALVIUM_SubaddressAccountRow_getLabel(void* subaddressAccountRow_ptr
     DEBUG_END()
 }
 //     std::string getBalance() const {return m_balance;}
-const char* SALVIUM_SubaddressAccountRow_getBalance(void* subaddressAccountRow_ptr) {
+const char* SALVIUM_SubaddressAccountRow_getBalance(void* subaddressAccountRow_ptr, const char* asset) {
     DEBUG_START()
     Monero::SubaddressAccountRow *subaddressAccountRow = reinterpret_cast<Monero::SubaddressAccountRow*>(subaddressAccountRow_ptr);
     std::string str = subaddressAccountRow->getBalance("SAL1");
@@ -978,7 +978,7 @@ const char* SALVIUM_SubaddressAccountRow_getBalance(void* subaddressAccountRow_p
     DEBUG_END()
 }
 //     std::string getUnlockedBalance() const {return m_unlockedBalance;}
-const char* SALVIUM_SubaddressAccountRow_getUnlockedBalance(void* subaddressAccountRow_ptr) {
+const char* SALVIUM_SubaddressAccountRow_getUnlockedBalance(void* subaddressAccountRow_ptr, const char* asset) {
     DEBUG_START()
     Monero::SubaddressAccountRow *subaddressAccountRow = reinterpret_cast<Monero::SubaddressAccountRow*>(subaddressAccountRow_ptr);
     std::string str = subaddressAccountRow->getUnlockedBalance("SAL1");

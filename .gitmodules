@@ -19,4 +19,5 @@
 [submodule "salvium"]
 	path = salvium
 	url = https://github.com/salvium/salvium
-	branch = develop
+	branch = main
+	shallow = true

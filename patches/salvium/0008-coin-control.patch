@@ -1108,14 +1108,14 @@ index a619bdd15..4f324c238 100644
      std::vector<wallet2::pending_tx> create_transactions_single(const crypto::key_image &ki, const cryptonote::account_public_address &address, const cryptonote::transaction_type tx_type, bool is_subaddress, const size_t outputs, const size_t fake_outs_count, const uint64_t unlock_time, uint32_t priority, const std::vector<uint8_t>& extra);
      std::vector<wallet2::pending_tx> create_transactions_return(std::vector<size_t> transfers_indices);
      std::vector<wallet2::pending_tx> create_transactions_from(const cryptonote::account_public_address &address, const cryptonote::transaction_type tx_type, const std::string& asset_type, bool is_subaddress, const size_t outputs, std::vector<size_t> unused_transfers_indices, std::vector<size_t> unused_dust_indices, const size_t fake_outs_count, const uint64_t unlock_time, uint32_t priority, const std::vector<uint8_t>& extra);
-@@ -1622,6 +1622,7 @@ private:
+@@ -1694,6 +1694,7 @@ private:
      uint64_t get_num_rct_outputs();
      size_t get_num_transfer_details() const { return m_transfers.size(); }
      const transfer_details &get_transfer_details(size_t idx) const;
 +    size_t get_transfer_details(const crypto::public_key &pk) const;
  
+     uint8_t estimate_current_hard_fork(const uint64_t height = 0) const;
      uint8_t get_current_hard_fork();
-     void get_hard_fork_info(uint8_t version, uint64_t &earliest_height);
 @@ -1835,7 +1836,9 @@ private:
      void freeze(size_t idx);
      void thaw(size_t idx);

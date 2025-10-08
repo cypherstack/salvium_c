@@ -1263,6 +1263,51 @@ const char* SALVIUM_Wallet_publicMultisigSignerKey(void* wallet_ptr) {
     DEBUG_END()
 }
 
+const char* SALVIUM_Wallet_secretViewBalance(void* wallet_ptr) {
+    DEBUG_START()
+    Monero::Wallet *wallet = reinterpret_cast<Monero::Wallet*>(wallet_ptr);
+    std::string str = wallet->secretViewBalance();
+    const std::string::size_type size = str.size();
+    char *buffer = new char[size + 1];   //we need extra char for NUL
+    memcpy(buffer, str.c_str(), size + 1);
+    return buffer;
+    DEBUG_END()
+}
+
+const char* SALVIUM_Wallet_secretProveSpend(void* wallet_ptr) {
+    DEBUG_START()
+    Monero::Wallet *wallet = reinterpret_cast<Monero::Wallet*>(wallet_ptr);
+    std::string str = wallet->secretProveSpend();
+    const std::string::size_type size = str.size();
+    char *buffer = new char[size + 1];   //we need extra char for NUL
+    memcpy(buffer, str.c_str(), size + 1);
+    return buffer;
+    DEBUG_END()
+}
+
+const char* SALVIUM_Wallet_secretGenerateAddress(void* wallet_ptr) {
+    DEBUG_START()
+    Monero::Wallet *wallet = reinterpret_cast<Monero::Wallet*>(wallet_ptr);
+    std::string str = wallet->secretGenerateAddress();
+    const std::string::size_type size = str.size();
+    char *buffer = new char[size + 1];   //we need extra char for NUL
+    memcpy(buffer, str.c_str(), size + 1);
+    return buffer;
+    DEBUG_END()
+}
+
+const char* SALVIUM_Wallet_secretGenerateImage(void* wallet_ptr) {
+    DEBUG_START()
+    Monero::Wallet *wallet = reinterpret_cast<Monero::Wallet*>(wallet_ptr);
+    std::string str = wallet->secretGenerateImage();
+    const std::string::size_type size = str.size();
+    char *buffer = new char[size + 1];   //we need extra char for NUL
+    memcpy(buffer, str.c_str(), size + 1);
+    return buffer;
+    DEBUG_END()
+}
+
+
 void SALVIUM_Wallet_stop(void* wallet_ptr) {
     DEBUG_START()
     Monero::Wallet *wallet = reinterpret_cast<Monero::Wallet*>(wallet_ptr);

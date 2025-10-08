@@ -960,16 +960,8 @@ extern ADDAPI uint64_t SALVIUM_WalletManager_blockchainHeight(void* wm_ptr);
 extern ADDAPI uint64_t SALVIUM_WalletManager_blockchainTargetHeight(void* wm_ptr);
 //     virtual uint64_t networkDifficulty() = 0;
 extern ADDAPI uint64_t SALVIUM_WalletManager_networkDifficulty(void* wm_ptr);
-//     virtual double miningHashRate() = 0;
-extern ADDAPI double SALVIUM_WalletManager_miningHashRate(void* wm_ptr);
 //     virtual uint64_t blockTarget() = 0;
 extern ADDAPI uint64_t SALVIUM_WalletManager_blockTarget(void* wm_ptr);
-//     virtual bool isMining() = 0;
-extern ADDAPI bool SALVIUM_WalletManager_isMining(void* wm_ptr);
-//     virtual bool startMining(const std::string &address, uint32_t threads = 1, bool background_mining = false, bool ignore_battery = true) = 0;
-extern ADDAPI bool SALVIUM_WalletManager_startMining(void* wm_ptr, const char* address, uint32_t threads, bool backgroundMining, bool ignoreBattery);
-//     virtual bool stopMining() = 0;
-extern ADDAPI bool SALVIUM_WalletManager_stopMining(void* wm_ptr, const char* address);
 //     virtual std::string resolveOpenAlias(const std::string &address, bool &dnssec_valid) const = 0;
 extern ADDAPI const char* SALVIUM_WalletManager_resolveOpenAlias(void* wm_ptr, const char* address, bool dnssec_valid);
 //     static std::tuple<bool, std::string, std::string, std::string, std::string> checkUpdates(
